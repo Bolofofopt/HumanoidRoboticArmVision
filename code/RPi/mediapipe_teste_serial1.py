@@ -13,8 +13,8 @@ FRAME_HEIGHT = 480
 FPS_TARGET = 30
 
 # Configuracao Serial
-SERIAL_PORT = "/dev/ttyUSB0"  # Alterar conforme a tua configuracao
-# Alternativas comuns: "/dev/ttyACM0", "/dev/serial0"
+SERIAL_PORT = "/dev/ttyAMA0"  # Alterar conforme a tua configuracao
+# Alternativas comuns: "/dev/ttyUSB0", "/dev/serial0"
 BAUD_RATE = 115200
 SEND_INTERVAL = 0.1  # Enviar a cada 100ms
 
