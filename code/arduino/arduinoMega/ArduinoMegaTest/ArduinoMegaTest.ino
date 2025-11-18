@@ -1,13 +1,12 @@
 #include <Servo.h>
 
-// --- Pinos para os Servos
+// --- Pinos para os Servos ---
 #define PIN_SERVO_COTOVELO 2
 #define PIN_SERVO_DEDO1    3
 #define PIN_SERVO_DEDO2    4
 #define PIN_SERVO_DEDO3    5
 #define PIN_SERVO_DEDO4    6
 #define PIN_SERVO_DEDO5    7
-
 
 Servo servoCotovelo;
 Servo servoDedo1; //Indicador
@@ -16,8 +15,8 @@ Servo servoDedo3; //Anular
 Servo servoDedo4; //Mindinho
 Servo servoDedo5; //Polgar
 
-// --- Variáveis para a Comunicação com RPi ---
-char g_bufferRPi[100];    // Buffer para guardar a mensagem
+// --- Variáveis para a Comunicação com PC (Teste) ---
+char g_bufferPC[100];    // Buffer para guardar a mensagem
 bool g_mensagemPronta = false; // Flag que indica se uma mensagem completa chegou
 int g_bufferIndex = 0;
 
@@ -25,14 +24,12 @@ void setup() {
   // Inicia Serial para Debug (PC)
   Serial.begin(9600);
   Serial.println("Mega (Mestre) iniciado.");
-  Serial.println("Ouvindo RPi na Serial2...");
-  Serial.println("Enviando para Uno na Serial1...");
+  Serial.println("Ouvindo PC na 'Serial'...");
+  Serial.println("Enviando para Uno na 'Serial2' (Pinos 16, 17)...");
 
-  // Inicia Serial1 para comunicar com o Arduino Uno (Escravo)
-  Serial1.begin(9600);
-
-  // Inicia Serial2 para comunicar com o Raspberry Pi (Mestre do Mega)
+  // Inicia Serial2 para comunicar com o Arduino Uno (Escravo)
   Serial2.begin(9600);
+  Serial.println("Serial2 ligada comunicação com Arduino");
 
   // Anexa os 6 servos aos seus pinos
   servoCotovelo.attach(PIN_SERVO_COTOVELO);
@@ -44,13 +41,13 @@ void setup() {
 }
 
 void loop() {
-  // 1. Verifica constantemente se o RPi enviou dados
-  ouvirRaspberryPi();
+  // 1. Verifica constantemente se o PC enviou dados
+  ouvirPC();
 
   // 2. Se uma mensagem completa foi recebida, processa-a
   if (g_mensagemPronta) {
     Serial.print("Mensagem recebida: $");
-    Serial.println(g_bufferRPi);
+    Serial.println(g_bufferPC);
     
     processarMensagem();
     
@@ -61,31 +58,27 @@ void loop() {
 }
 
 /**
- * @brief Ouve a porta Serial2 (RPi) e guarda a mensagem no buffer.
- * Esta função é o "parser" que procura por '$' e '\n'.
+ * @brief Ouve a porta Serial (PC) e guarda a mensagem no buffer.
  */
-void ouvirRaspberryPi() {
+void ouvirPC() {
   static bool emMensagem = false; // Flag para saber se estamos a ler uma msg
 
-  while (Serial2.available() > 0 && !g_mensagemPronta) {
-    char inChar = Serial2.read();
+  while (Serial3.available() > 0 && !g_mensagemPronta) {
+    char inChar = Serial3.read();
 
     if (inChar == '$') {
-      // Início de uma nova mensagem, reinicia o buffer
       g_bufferIndex = 0;
       emMensagem = true;
     } 
     else if (emMensagem) {
       if (inChar == '\n') {
-        // Fim da mensagem
-        g_bufferRPi[g_bufferIndex] = '\0'; // Termina a string
-        g_mensagemPronta = true; // Avisa o loop() que a msg está pronta
+        g_bufferPC[g_bufferIndex] = '\0'; // Termina a string
+        g_mensagemPronta = true;
         emMensagem = false;
       } 
       else {
-        // Adiciona o caracter ao buffer
-        if (g_bufferIndex < 99) { // Proteção contra overflow
-          g_bufferRPi[g_bufferIndex] = inChar;
+        if (g_bufferIndex < 99) {
+          g_bufferPC[g_bufferIndex] = inChar;
           g_bufferIndex++;
         }
       }
@@ -95,27 +88,26 @@ void ouvirRaspberryPi() {
 
 /**
  * @brief Processa a string completa que está no buffer.
- * Separa os valores e envia os comandos para o Uno e para os Servos.
  */
 void processarMensagem() {
-  // strtok() é uma função C que divide uma string (token = pedaço)
-  // O primeiro argumento é a string, os seguintes são cópias (NULL)
   
-  // 1. Obter o <Base_Ang> (para o Stepper/Uno)
-  char* token = strtok(g_bufferRPi, ",");
+  // 1. Obter o <Estado> (para o Stepper/Uno)
+  // strtok divide o buffer 'g_bufferPC' no primeiro delimitador ','
+  char* token = strtok(g_bufferPC, ",");
   if (token == NULL) return; // Mensagem mal formatada
   
-  int baseAng = atoi(token); // Converte "90" (texto) para 90 (número)
+  // token agora é uma string (char*) que contém "0", "1" ou "2"
 
-  // Envia o comando para o Uno via Serial1
-  // Baseado na nossa conversa anterior: '1' = 90 graus, '0' = 0 graus
-  if (baseAng >= 90) {
-    Serial1.write('1');
-    Serial.println("  -> Comando para Uno: '1' (90 graus)");
-  } else {
-    Serial1.write('0');
-    Serial.println("  -> Comando para Uno: '0' (0 graus)");
-  }
+  // ******* A GRANDE MUDANÇA ESTÁ AQUI *******
+  
+  // Enviamos o *primeiro caracter* da string 'token'.
+  // Se token = "1", isto envia o caracter '1'
+  Serial2.write(token[0]);
+  
+  // Imprime no monitor do PC o que foi enviado
+  Serial.print("  -> Comando para Uno: ");
+  Serial.println(token); // Imprime a string "0", "1", ou "2"
+
 
   // 2. Obter os 6 ângulos restantes (para os Servos)
   

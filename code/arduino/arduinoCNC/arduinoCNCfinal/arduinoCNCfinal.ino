@@ -10,16 +10,17 @@
 #define SOFT_TX_PIN 11
 
 // --- Nossos Cálculos ---
-// (200 passos * 16 microsteps) / 4 = 800 passos
 const int PASSOS_PARA_90_GRAUS = 800;
+const int PASSOS_PARA_180_GRAUS = 1600; // 800 * 2
 
 // Variável para guardar a posição atual
-// false = Posição 0
-// true  = Posição 1 (90 graus)
-bool estaNaPosicao90 = false;
+// 0 = Posição 0 (0 graus)
+// 1 = Posição 1 (+90 graus)
+// 2 = Posição 2 (-90 graus)
+int posicaoAtual = 0; 
 
 // Configura a porta série de software
-SoftwareSerial megaSerial(SOFT_RX_PIN, SOFT_TX_PIN); // RX, TX
+//SoftwareSerial megaSerial(SOFT_RX_PIN, SOFT_TX_PIN); // RX, TX
 
 void setup() {
   // Configura os pinos do motor
@@ -32,43 +33,65 @@ void setup() {
 
   // Inicia a porta série para o PC (Debug)
   Serial.begin(9600);
-  Serial.println("Uno pronto para receber comandos...");
+  Serial.println("Uno escravo pronto (v2). Posição atual: 0");
 
   // Inicia a porta série para o Mega
-  megaSerial.begin(9600);
+  //megaSerial.begin(9600);
 }
 
 void loop() {
   // Verifica se o Mega enviou algum dado
-  if (megaSerial.available() > 0) {
-    char comando = megaSerial.read();
+  if (Serial.available() > 0) {
+    char comando = Serial.read();
 
-    // --- LÓGICA DE MOVIMENTO ---
+    // --- LÓGICA DE MOVIMENTO (Máquina de Estados) ---
 
-    // Se o comando for '1' (ir para 90°) E não estivermos já lá
-    if (comando == '1' && !estaNaPosicao90) {
-      Serial.println("Recebido '1'. Movendo para 90 graus...");
-      // moveMotor(passos, direcao_para_90_graus)
-      moveMotor(PASSOS_PARA_90_GRAUS, HIGH); // Assumindo HIGH como 0->90
-      estaNaPosicao90 = true;
-      Serial.println("Movimento concluído. Na posição 90.");
+    // ----- IR PARA POSIÇÃO 0 (Comando '0') -----
+    if (comando == '0' && posicaoAtual != 0) {
+      Serial.print("Recebido '0'. Indo para 0 graus...");
+      if (posicaoAtual == 1) { // Estava em +90
+        moveMotor(PASSOS_PARA_90_GRAUS, LOW); // Gira -90 graus
+        Serial.println(" (vindo de +90)");
+      } 
+      else if (posicaoAtual == 2) { // Estava em -90
+        moveMotor(PASSOS_PARA_90_GRAUS, HIGH); // Gira +90 graus
+        Serial.println(" (vindo de -90)");
+      }
+      posicaoAtual = 0;
     }
     
-    // Se o comando for '0' (voltar a 0°) E estivermos em 90°
-    else if (comando == '0' && estaNaPosicao90) {
-      Serial.println("Recebido '0'. Retornando para 0 graus...");
-      // moveMotor(passos, direcao_para_0_graus)
-      moveMotor(PASSOS_PARA_90_GRAUS, LOW); // Assumindo LOW como 90->0
-      estaNaPosicao90 = false;
-      Serial.println("Movimento concluído. Na posição 0.");
+    // ----- IR PARA POSIÇÃO 1 (Comando '1', +90 graus) -----
+    else if (comando == '1' && posicaoAtual != 1) {
+      Serial.print("Recebido '1'. Indo para +90 graus...");
+      if (posicaoAtual == 0) { // Estava em 0
+        moveMotor(PASSOS_PARA_90_GRAUS, HIGH); // Gira +90 graus
+        Serial.println(" (vindo de 0)");
+      } 
+      else if (posicaoAtual == 2) { // Estava em -90
+        moveMotor(PASSOS_PARA_180_GRAUS, HIGH); // Gira +180 graus
+        Serial.println(" (vindo de -90)");
+      }
+      posicaoAtual = 1;
+    }
+
+    // ----- IR PARA POSIÇÃO 2 (Comando '2', -90 graus) -----
+    else if (comando == '2' && posicaoAtual != 2) {
+      Serial.print("Recebido '2'. Indo para -90 graus...");
+      if (posicaoAtual == 0) { // Estava em 0
+        moveMotor(PASSOS_PARA_90_GRAUS, LOW); // Gira -90 graus
+        Serial.println(" (vindo de 0)");
+      } 
+      else if (posicaoAtual == 1) { // Estava em +90
+        moveMotor(PASSOS_PARA_180_GRAUS, LOW); // Gira -180 graus
+        Serial.println(" (vindo de +90)");
+      }
+      posicaoAtual = 2;
     }
   }
 }
 
 /**
  * Função para mover o motor
- * @param numPassos - Quantos passos dar
- * @param direcao - O valor para o pino de Direção (HIGH ou LOW)
  */
 void moveMotor(int numPassos, bool direcao) {
   digitalWrite(DIR_PIN, direcao);
