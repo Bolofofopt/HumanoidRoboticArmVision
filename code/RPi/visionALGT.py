@@ -8,7 +8,7 @@ from picamera2 import Picamera2 # type:ignore
 import numpy as np
 
 # ==============================================================================
-# CONFIGURAÇÕES GERAIS
+#                           CONFIGURAÇÕES GERAIS
 # ==============================================================================
 
 # Definições da Resolução e Taxa de Atualização da Câmara
@@ -54,7 +54,7 @@ FINGER_IDX = {
 }
 
 # ==============================================================================
-# INICIALIZAÇÃO DE BIBLIOTECAS
+#                       INICIALIZAÇÃO DE BIBLIOTECAS
 # ==============================================================================
 
 mp_pose = mp.solutions.pose
@@ -77,7 +77,7 @@ except Exception as e:
     arduino = None
 
 # ==============================================================================
-# FUNÇÕES AUXILIARES (LÓGICA MATEMÁTICA)
+#                  FUNÇÕES AUXILIARES (LÓGICA MATEMÁTICA)
 # ==============================================================================
 
 def angulo_3pts(a, b, c):
@@ -136,7 +136,7 @@ def classify_arm_orientation(angle_deg):
     return "Indet", 1  # Por defeito assume Frente
 
 # ==============================================================================
-# LOOP PRINCIPAL
+#                             LOOP PRINCIPAL
 # ==============================================================================
 
 # Inicializar Picamera2 (Método eficiente para RPi 5)
