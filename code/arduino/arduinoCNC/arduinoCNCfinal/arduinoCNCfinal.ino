@@ -1,104 +1,85 @@
-#include <SoftwareSerial.h>
+// --- Definições de Hardware (CNC Shield - Eixo X) ---
+#define STEP_PIN    2
+#define DIR_PIN     5
+#define ENABLE_PIN  8
 
-// --- Pinos do CNC Shield (Eixo X) ---
-#define STEP_PIN 2
-#define DIR_PIN  5
-#define ENABLE_PIN 8
+// --- Definição de Parâmetros Mecânicos ---
+// O motor tem 200 passos/volta (1.8 graus/passo).
+// Com driver em full-step: 200 passos = 360 graus.
+// Se estiver a usar microstepping (ex: 1/16), estes valores devem ser ajustados.
+const int PASSOS_PARA_90_GRAUS = 800;   // Ajustar conforme o microstepping configurado nos jumpers
+const int PASSOS_PARA_180_GRAUS = 1600; 
 
-// --- Pinos para Comunicação com o Mega ---
-#define SOFT_RX_PIN 10
-#define SOFT_TX_PIN 11
-
-// --- Nossos Cálculos ---
-const int PASSOS_PARA_90_GRAUS = 800;
-const int PASSOS_PARA_180_GRAUS = 1600; // 800 * 2
-
-// Variável para guardar a posição atual
-// 0 = Posição 0 (0 graus)
-// 1 = Posição 1 (+90 graus)
-// 2 = Posição 2 (-90 graus)
+// --- Variáveis de Estado --- (FIM DE CURSO POR IMPLEMENTAR)
+// 0 = Centro (0 graus)
+// 1 = Esquerda (+90 graus)
+// 2 = Direita (-90 graus)
 int posicaoAtual = 0; 
 
-// Configura a porta série de software
-//SoftwareSerial megaSerial(SOFT_RX_PIN, SOFT_TX_PIN); // RX, TX
-
 void setup() {
-  // Configura os pinos do motor
+  // Configuração dos pinos do driver A4988
   pinMode(STEP_PIN, OUTPUT);
   pinMode(DIR_PIN, OUTPUT);
   pinMode(ENABLE_PIN, OUTPUT);
   
-  // Ativa os drivers do motor
+  // ATIVAÇÃO DO MOTOR:
+  // O pino Enable é ativo a LOW. Ao colocar LOW, as bobinas são energizadas
+  // e o motor ganha binário de retenção (fica duro).
   digitalWrite(ENABLE_PIN, LOW);
 
-  // Inicia a porta série para o PC (Debug)
+  // Inicia a comunicação Série (UART) com o Arduino MEGA
   Serial.begin(9600);
-  Serial.println("Uno escravo pronto (v2). Posição atual: 0");
-
-  // Inicia a porta série para o Mega
-  //megaSerial.begin(9600);
 }
 
 void loop() {
-  // Verifica se o Mega enviou algum dado
+  // Verifica se o Arduino MEGA enviou algum comando
   if (Serial.available() > 0) {
     char comando = Serial.read();
 
-    // --- LÓGICA DE MOVIMENTO (Máquina de Estados) ---
+    // --- MÁQUINA DE ESTADOS PARA CONTROLO DE POSIÇÃO ---
 
-    // ----- IR PARA POSIÇÃO 0 (Comando '0') -----
+    // CASO 1: Comando para ir ao CENTRO (0)
     if (comando == '0' && posicaoAtual != 0) {
-      Serial.print("Recebido '0'. Indo para 0 graus...");
       if (posicaoAtual == 1) { // Estava em +90
-        moveMotor(PASSOS_PARA_90_GRAUS, LOW); // Gira -90 graus
-        Serial.println(" (vindo de +90)");
+        moveMotor(PASSOS_PARA_90_GRAUS, LOW); // Recua 90
       } 
       else if (posicaoAtual == 2) { // Estava em -90
-        moveMotor(PASSOS_PARA_90_GRAUS, HIGH); // Gira +90 graus
-        Serial.println(" (vindo de -90)");
+        moveMotor(PASSOS_PARA_90_GRAUS, HIGH); // Avança 90
       }
-      posicaoAtual = 0;
+      posicaoAtual = 0; // Atualiza estado
     }
     
-    // ----- IR PARA POSIÇÃO 1 (Comando '1', +90 graus) -----
+    // CASO 2: Comando para ir para ESQUERDA (+90)
     else if (comando == '1' && posicaoAtual != 1) {
-      Serial.print("Recebido '1'. Indo para +90 graus...");
       if (posicaoAtual == 0) { // Estava em 0
-        moveMotor(PASSOS_PARA_90_GRAUS, HIGH); // Gira +90 graus
-        Serial.println(" (vindo de 0)");
+        moveMotor(PASSOS_PARA_90_GRAUS, HIGH); // Avança 90
       } 
       else if (posicaoAtual == 2) { // Estava em -90
-        moveMotor(PASSOS_PARA_180_GRAUS, HIGH); // Gira +180 graus
-        Serial.println(" (vindo de -90)");
+        moveMotor(PASSOS_PARA_180_GRAUS, HIGH); // Avança 180 (atravessa o centro)
       }
       posicaoAtual = 1;
     }
 
-    // ----- IR PARA POSIÇÃO 2 (Comando '2', -90 graus) -----
+    // CASO 3: Comando para ir para DIREITA (-90)
     else if (comando == '2' && posicaoAtual != 2) {
-      Serial.print("Recebido '2'. Indo para -90 graus...");
       if (posicaoAtual == 0) { // Estava em 0
-        moveMotor(PASSOS_PARA_90_GRAUS, LOW); // Gira -90 graus
-        Serial.println(" (vindo de 0)");
+        moveMotor(PASSOS_PARA_90_GRAUS, LOW); // Recua 90
       } 
       else if (posicaoAtual == 1) { // Estava em +90
-        moveMotor(PASSOS_PARA_180_GRAUS, LOW); // Gira -180 graus
-        Serial.println(" (vindo de +90)");
+        moveMotor(PASSOS_PARA_180_GRAUS, LOW); // Recua 180
       }
       posicaoAtual = 2;
     }
   }
 }
 
-/**
- * Função para mover o motor
- */
+// Função auxiliar para gerar os pulsos de passo
 void moveMotor(int numPassos, bool direcao) {
   digitalWrite(DIR_PIN, direcao);
   
   for (int x = 0; x < numPassos; x++) {
     digitalWrite(STEP_PIN, HIGH);
-    delayMicroseconds(500); // Velocidade do seu código original
+    delayMicroseconds(500); // Define a velocidade do motor
     digitalWrite(STEP_PIN, LOW);
     delayMicroseconds(500);
   }

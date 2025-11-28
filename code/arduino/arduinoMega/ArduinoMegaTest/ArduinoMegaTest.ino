@@ -26,12 +26,11 @@ bool g_mensagemPronta = false;
 int g_bufferIndex = 0;
 
 void setup() {
-  // 1. VELOCIDADE MÁXIMA NA SERIAL
-  // ATENÇÃO: Muda o teu Monitor Serial ou software do PC para 115200
+  // 1. Velocidade máxima na serial que comunica com o RaspberryPi
   Serial.begin(115200); 
-  Serial2.begin(9600); // O Uno mantém-se a 9600 (suficiente para 1 char)
+  Serial2.begin(9600); // O Uno mantém-se a 9600
 
-  // 2. VELOCIDADE MÁXIMA NO I2C (PCA9685)
+  // 2. Velocidade máxima no I2C (PCA9685)
   pwm.begin();
   pwm.setPWMFreq(50);
   Wire.setClock(400000); // Aumenta de 100kHz para 400kHz (Muito mais rápido!)
