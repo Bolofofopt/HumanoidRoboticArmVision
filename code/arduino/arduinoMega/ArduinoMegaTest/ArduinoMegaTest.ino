@@ -5,7 +5,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 // --- CALIBRAÇÃO (Ajusta aqui se necessário) ---
 #define SERVOMIN  150 
-#define SERVOMAX  600 
+#define SERVOMAX  530
 
 // Variáveis para guardar os valores de pulso já calculados
 // Isto evita fazer contas matemáticas durante o movimento
@@ -27,8 +27,8 @@ int g_bufferIndex = 0;
 
 void setup() {
   // 1. Velocidade máxima na serial que comunica com o RaspberryPi
-  Serial.begin(115200); 
-  Serial2.begin(9600); // O Uno mantém-se a 9600
+  Serial2.begin(115200); 
+  Serial3.begin(9600); // O Uno mantém-se a 9600
 
   // 2. Velocidade máxima no I2C (PCA9685)
   pwm.begin();
@@ -36,8 +36,8 @@ void setup() {
   Wire.setClock(400000); // Aumenta de 100kHz para 400kHz (Muito mais rápido!)
 
   // 3. PRÉ-CÁLCULO (Matemática feita apenas uma vez)
-  PULSO_FECHADO = map(0, 0, 180, SERVOMIN, SERVOMAX);
-  PULSO_ABERTO  = map(90, 0, 180, SERVOMIN, SERVOMAX);
+  PULSO_ABERTO = map(0, 0, 180, SERVOMIN, SERVOMAX);
+  PULSO_FECHADO  = map(180, 0, 180, SERVOMIN, SERVOMAX);
 
   delay(10);
   
@@ -48,8 +48,8 @@ void setup() {
 
 void loop() {
   // Leitura otimizada da Serial
-  while (Serial.available() > 0 && !g_mensagemPronta) {
-    char inChar = Serial.read();
+  while (Serial2.available() > 0 && !g_mensagemPronta) {
+    char inChar = Serial2.read();
     if (inChar == '$') {
       g_bufferIndex = 0;
     } 
@@ -74,7 +74,7 @@ void processarMensagemRapida() {
   // 1. Stepper (Uno)
   char* token = strtok(g_bufferPC, ",");
   if (token == NULL) return;
-  Serial2.write(token[0]); 
+  Serial3.write(token[0]); 
 
   // 2. Servos PCA - Execução direta sem prints
   // Chamamos a função diretamente para evitar overhead
@@ -92,7 +92,7 @@ inline void moverRapido(int porta) {
   if (token != NULL) {
     // Se o caracter for '1', usa PULSO_ABERTO, senão usa PULSO_FECHADO
     // Esta operação ternária é mais rápida que if/else tradicional
-    int pulso = (token[0] == '1') ? PULSO_ABERTO : PULSO_FECHADO;
+    int pulso = (token[0] == '1') ? PULSO_FECHADO : PULSO_ABERTO;
     
     pwm.setPWM(porta, 0, pulso);
   }
