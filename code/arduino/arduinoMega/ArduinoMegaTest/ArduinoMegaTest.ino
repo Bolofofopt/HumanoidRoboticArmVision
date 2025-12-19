@@ -4,8 +4,8 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 // --- CALIBRAÇÃO (Ajusta aqui se necessário) ---
-#define SERVOMIN  150 
-#define SERVOMAX  530
+#define SERVOMIN  100 
+#define SERVOMAX  500
 
 // Variáveis para guardar os valores de pulso já calculados
 // Isto evita fazer contas matemáticas durante o movimento
