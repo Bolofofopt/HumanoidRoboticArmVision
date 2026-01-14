@@ -1,5 +1,5 @@
 import cv2
-import mediapipe as mp
+import mediapipe as mp # type: ignore
 import math
 import statistics
 
