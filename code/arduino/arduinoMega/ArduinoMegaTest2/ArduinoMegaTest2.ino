@@ -13,12 +13,12 @@ int PULSO_FECHADO; // Valor para 0 graus (Dedos/Cotovelo ativo)
 
 // --- PINOS PCA ---
 #define PORTA_COTOVELO 0
-#define PORTA_DEDO1    1 
-#define PORTA_DEDO2    2 
-#define PORTA_DEDO3    3 
-#define PORTA_DEDO4    4 
-#define PORTA_DEDO5    5
-#define PORTA_ROTACAO  6  // NOVA PORTA PARA O SERVO DE ROTAÇÃO
+#define PORTA_DEDO1    13 
+#define PORTA_DEDO2    11 
+#define PORTA_DEDO3    10 
+#define PORTA_DEDO4    15 
+#define PORTA_DEDO5    14
+#define PORTA_ROTACAO  12  // NOVA PORTA PARA O SERVO DE ROTAÇÃO
 
 // --- COMMS ---
 char g_bufferPC[100];    
@@ -27,6 +27,7 @@ int g_bufferIndex = 0;
 
 void setup() {
   // 1. Velocidade máxima na série que comunica com o RaspberryPi
+  Serial.begin(115200); // Aumentado para 115200 para debug rapido
   Serial2.begin(115200); 
   Serial3.begin(9600); // O Uno mantém-se a 9600
 
@@ -44,7 +45,14 @@ void setup() {
   
   // Posição inicial
   moverTodos(0);
-  Serial.println("MEGA PRONTO (MODO TURBO 115200) + ROTACAO");
+  Serial.println("MEGA PRONTO (MODO TURBO 115200) + ROTACAO + DEBUG ATIVADO");
+  Serial.println("Mensagens exemplo para debug: ");
+  Serial.println("$1,0,1,1,1,1,1,90");
+  Serial.println("$1,0,0,0,0,0,0,90");
+  Serial.println("$0,1,1,1,1,1,1,0");
+  Serial.println("$2,0,0,1,1,1,0,180");
+  Serial.println("$1,0,1,0,0,1,1,120");
+  Serial.println("Aguardando comandos...");
 }
 
 void loop() {
@@ -74,10 +82,16 @@ void loop() {
 void processarMensagemRapida() {
   // Formato recebido: $orient,flex,d1,d2,d3,d4,d5,rotacao
   
+  // DEBUG: Mostrar mensagem crua recebida
+  Serial.print("RX: ");
+  Serial.println(g_bufferPC);
+  
   // 1. Stepper (Uno) -> Primeira Token
   char* token = strtok(g_bufferPC, ",");
   if (token == NULL) return;
   Serial3.write(token[0]); 
+  Serial.print("STEER -> Uno: ");
+  Serial.println(token[0]); 
   
   // 2. Servos PCA
   // Cotovelo (Digital: 0 ou 1)
@@ -102,6 +116,10 @@ inline void moverDigital(int porta) {
     // Se "1", usa PULSO_FECHADO. Se "0", PULSO_ABERTO
     int pulso = (token[0] == '1') ? PULSO_FECHADO : PULSO_ABERTO;
     pwm.setPWM(porta, 0, pulso);
+    
+    Serial.print("D["); Serial.print(porta); Serial.print("]: ");
+    Serial.print(token[0] == '0' ? "FECHADO" : "ABERTO");
+    Serial.print(" ("); Serial.print(pulso); Serial.println(")");
   }
 }
 
@@ -117,6 +135,10 @@ inline void moverAnalogico(int porta) {
     
     int pulso = map(angulo, 0, 180, SERVOMIN, SERVOMAX);
     pwm.setPWM(porta, 0, pulso);
+
+    Serial.print("ROT["); Serial.print(porta); Serial.print("]: ");
+    Serial.print(angulo);
+    Serial.print(" deg ("); Serial.print(pulso); Serial.println(")");
   }
 }
 

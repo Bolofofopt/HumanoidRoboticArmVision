@@ -44,7 +44,7 @@ drawing_spec_conn = mp_drawing.DrawingSpec(thickness=1)
 
 # Definição de dedos
 FINGERS = {
-    "polegar": [2, 3, 4],
+    "polegar": [1, 2, 4],
     "indicador": [5, 6, 8],
     "medio": [9, 10, 12],
     "anelar": [13, 14, 16],
@@ -166,7 +166,7 @@ def calculate_hand_rotation(hand_landmarks, flex_status, arm_orientation):
             axis_used = "Y-Inv (Ext-Corpo)"
 
     # Normalização
-    MAX_DIFF = 0.15
+    MAX_DIFF = 0.22
     rotation_value = max(-1.0, min(1.0, diff / MAX_DIFF))
     
     orientation = "Indefinido"
