@@ -15,7 +15,6 @@ O que este programa faz:
 4. Envia essas informações por um cabo (Série) para o Arduino, que controla os motores.
 
 LINGUAGEM: Python
-IDIOMA DOS COMENTÁRIOS: Português de Portugal (PT-PT)
 ======================================================================================
 """
 

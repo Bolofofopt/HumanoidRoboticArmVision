@@ -17,7 +17,6 @@
  * - Motor de Passo/Stepper (controlado por outro Arduino Uno): Usado para rodar a base do braço.
  *
  * LINGUAGEM: C++ (Linguagem padrão do Arduino)
- * IDIOMA DOS COMENTÁRIOS: Português de Portugal (PT-PT)
  * ======================================================================================
  */
 

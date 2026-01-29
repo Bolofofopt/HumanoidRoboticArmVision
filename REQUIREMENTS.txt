@@ -1,0 +1,54 @@
+======================================================================================
+                        PROJECT REQUIREMENTS & DEPENDENCIES
+======================================================================================
+
+--------------------------------------------------------------------------------------
+1. PC (COMPUTER) - VisionDebugger_PC.py
+--------------------------------------------------------------------------------------
+SYSTEM: Windows 11
+PYTHON VERSION: 3.12 (Tested)
+
+LIBRARIES (PC):
+- opencv-python == 4.12.0.88
+- mediapipe == 0.10.13
+- numpy == 2.4.1
+
+* NOTE: The PC version uses the new "MediaPipe Tasks" API (`mediapipe.tasks`), 
+which requires the external model files (`pose_landmarker_lite.task` and `hand_landmarker.task`) 
+to be in the same folder as the script.
+
+--------------------------------------------------------------------------------------
+2. RASPBERRY PI 5 - ArmController.py
+--------------------------------------------------------------------------------------
+SYSTEM: Raspberry Pi 5 (Linux / Raspberry Pi OS Bookworm)
+PYTHON VERSION: 3.x (Default System Python)
+
+LIBRARIES (RPi):
+- picamera2 (Pre-installed on RPi 5 OS)
+- mediapipe-rpi4 (?) [OR standard 'mediapipe' via pip --break-system-packages]
+- opencv-python (?)
+- pyserial (?)
+- numpy (?)
+
+* IMPORTANT NOTE: The Raspberry Pi code uses the "Legacy MediaPipe Solutions" API (`mp.solutions.pose` / `mp.solutions.hands`).
+  - Unlike the PC version, this DOES NOT require the `.task` binary files to be manually downloaded/placed.
+  - The models are built-in to the library installation on the RPi.
+
+--------------------------------------------------------------------------------------
+3. ARDUINO MEGA - MotorDriver.ino
+--------------------------------------------------------------------------------------
+SYSTEM: Arduino Mega 2560
+SOFTWARE: Arduino IDE (Latest Version)
+
+LIBRARIES (Arduino):
+- Adafruit PWMServoDriver Library (Latest Version)
+  (Install via Library Manager: Sketch > Include Library > Manage Libraries > Search "Adafruit PCA9685")
+- Wire (Built-in Standard Library)
+
+--------------------------------------------------------------------------------------
+FILE STRUCTURE FOR PC:
+--------------------------------------------------------------------------------------
+/ProjectFolder/
+  ├── VisionDebugger_PC.py
+  ├── pose_landmarker_lite.task  <-- REQUIRED for PC
+  └── hand_landmarker.task       <-- REQUIRED for PC
