@@ -25,10 +25,10 @@ PYTHON VERSION: 3.x (Default System Python)
 
 LIBRARIES (RPi):
 - picamera2 (Pre-installed on RPi 5 OS)
-- mediapipe-rpi4 (?) [OR standard 'mediapipe' via pip --break-system-packages]
-- opencv-python (?)
-- pyserial (?)
-- numpy (?)
+- mediapipe (Latest version via `pip install mediapipe --break-system-packages`)
+- opencv-python (Latest version)
+- pyserial (Latest version)
+- numpy (Latest version)
 
 * IMPORTANT NOTE: The Raspberry Pi code uses the "Legacy MediaPipe Solutions" API (`mp.solutions.pose` / `mp.solutions.hands`).
   - Unlike the PC version, this DOES NOT require the `.task` binary files to be manually downloaded/placed.

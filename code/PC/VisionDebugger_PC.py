@@ -88,6 +88,7 @@ COLOR_POSE_BONE = (0, 255, 0)      # Green
 COLOR_POSE_JOINT = (0, 0, 255)     # Red
 COLOR_HAND_BONE = (255, 255, 0)    # Cyan (Yellow+Green ?)
 COLOR_HAND_JOINT = (255, 0, 0)     # Blue
+THICKNESS = 2                      # Line thickness for drawings
 
 # --- MODEL CONFIGURATION (Where AI files are) ---
 # Program looks for ".task" files in same folder where this .py file is
@@ -183,26 +184,88 @@ def determine_hand_side(hc_x, hc_y, plm):
     """
     return "Left" if math.hypot(hc_x - plm[15].x, hc_y - plm[15].y) < math.hypot(hc_x - plm[16].x, hc_y - plm[16].y) else "Right"
 
-def calculate_hand_rotation(hand_landmarks, flex_status, arm_orientation):
+def determine_arm_orientation(angle):
+    """Tells where the arm is pointing based on the shoulder angle."""
+    if angle <= TH_ARM_LEFT:
+        return "Left (Body)" 
+    elif angle <= TH_ARM_CENTER_MAX:
+        return "Center (Front)" 
+    else:
+        return "Right (Out)"
+
+def determine_arm_flexion(shoulder_y, wrist_y):
+    """
+    Tells if the arm is raised (flexed).
+    Compares the height (Y) of the shoulder and the wrist.
+    """
+    diff_y = abs(shoulder_y - wrist_y)
+    if diff_y > TH_FLEXION_Y:
+        return "Flexed", diff_y
+    else:
+        return "Extended", diff_y
+
+def calculate_hand_rotation(hand_landmarks, flex_status, arm_orientation, side="Right"):
     """
     Calculates if hand is Palm or Back (Dorsum).
     Measures distance between Thumb and Pinky.
     If distance is positive it's palm, negative it's back (or vice-versa).
     """
-    thumb, pinky = hand_landmarks[4], hand_landmarks[20]
+    thumb = hand_landmarks[4]  # Point at tip of thumb
+    pinky = hand_landmarks[20] # Point at tip of pinky
+    
+    diff = 0
+    t_val = 0
+    p_val = 0
+    axis_used = "Indef"
+    
+    # Logic changes depending on whether arm is bent or extended.
     is_flexed = (flex_status == "Flexed")
     
     if is_flexed:
-        diff, axis_used = -(thumb.x - pinky.x), "X (Bent)"
-    else:
-        if "Right" in arm_orientation:
-            diff, axis_used = (thumb.y - pinky.y), "Y (Ext-Right)"
+        # CASE 1: Arm Flexed (Bent)
+        # We use difference in X axis (Horizontal)
+        t_val = thumb.x
+        p_val = pinky.x
+        
+        # CORRECT LOGIC FOR MIRRORED IMAGE (Selfie Mode):
+        if side == "Right":
+            # Right Hand (on screen Right): Palm means Thumb(Left) < Pinky(Right) -> Diff is Neg
+            diff = -(t_val - p_val) 
         else:
-            diff, axis_used = -(thumb.y - pinky.y), "Y-Inv (Ext-Body)"
+            # Left Hand (on screen Left): Palm means Thumb(Right) > Pinky(Left) -> Diff is Pos -> Invert
+            diff = (t_val - p_val)
+            
+        axis_used = "X (Bent)"
+        
+    else:
+        # Arm Extended
+        if "Right" in arm_orientation:
+            # CASE 3: Extended to Right -> Use Y axis (Vertical)
+            t_val = thumb.y
+            p_val = pinky.y
+            diff = (t_val - p_val)
+            axis_used = "Y (Ext-Right)"
+            
+        else:
+            # CASE 2: Extended to Center/Body -> Use Inverted Y axis
+            t_val = thumb.y
+            p_val = pinky.y
+            diff = -(t_val - p_val)
+            axis_used = "Y-Inv (Ext-Body)"
 
-    ratio = diff / 0.15
-    rotation_value = max(-1.0, min(1.0, ratio))
-    orientation = "Palm" if rotation_value < -0.3 else "Back" if rotation_value > 0.3 else "Rotating / Edge"
+    # Normalization: Converts raw pixel difference to a standard value between -1 and 1
+    MAX_DIFF = 0.22
+    rotation_value = max(-1.0, min(1.0, diff / MAX_DIFF))
+    
+    # Classify by text for Debugging
+    orientation = "Undefined"
+    if rotation_value < -0.3:
+        orientation = "Palm"
+    elif rotation_value > 0.3:
+        orientation = "Back"
+    else:
+        orientation = "Rotating / Edge"
+        
     return diff, rotation_value, orientation, axis_used
 
 
@@ -311,8 +374,9 @@ while True:
     # 6. If HAND detected:
     if hand_result.hand_landmarks:
         hand_lm = hand_result.hand_landmarks[0]
-        # Calculate Palm Rotation
-        _, rot_val, rot_str, _ = calculate_hand_rotation(hand_lm, flexion_state, arm_orientation)
+        # Calculate Hand Rotation (Palm/Back)
+        _, hand_rotation_val, hand_orientation_str, _ = calculate_hand_rotation(
+            hand_lm, flexion_state, arm_orientation, side)
         
         # Check each finger
         y0 = 80
@@ -323,8 +387,8 @@ while True:
             
         # Draw rotation bar
         cv2.rectangle(out, (10, y0+10), (160, y0+25), (100, 100, 100), 2)
-        cv2.circle(out, (10 + int((rot_val + 1) / 2 * 150), y0+17), 6, (0, 255, 255), -1)
-        cv2.putText(out, f"{rot_str}", (10, y0+45), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+        cv2.circle(out, (10 + int((hand_rotation_val + 1) / 2 * 150), y0+17), 6, (0, 255, 255), -1)
+        cv2.putText(out, f"{hand_orientation_str}", (10, y0+45), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
         
         draw_landmarks_custom(out, hand_lm, HAND_CONNECTIONS, COLOR_HAND_JOINT, COLOR_HAND_BONE)
 

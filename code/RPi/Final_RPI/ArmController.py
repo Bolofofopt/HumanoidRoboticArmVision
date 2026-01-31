@@ -165,7 +165,7 @@ def determine_arm_flexion(shoulder_y, wrist_y):
     else:
         return "Extended", diff_y
 
-def calculate_hand_rotation(hand_landmarks, flex_status, arm_orientation):
+def calculate_hand_rotation(hand_landmarks, flex_status, arm_orientation, side="Right"):
     """
     Tries to guess if the palm is facing the camera or the back of the hand.
     Uses the position of the Thumb and Pinky.
@@ -185,10 +185,17 @@ def calculate_hand_rotation(hand_landmarks, flex_status, arm_orientation):
     
     if is_flexed:
         # CASE 1: Arm Flexed (Bent)
-        # We use difference in X axis (Horizontal)
         t_val = thumb.x
         p_val = pinky.x
-        diff = -(t_val - p_val) 
+        
+        # CORRECT LOGIC FOR MIRRORED IMAGE (Selfie Mode):
+        if side == "Right":
+            # Right Hand (on screen Right): Palm means Thumb(Left) < Pinky(Right) -> Diff is Neg
+            diff = (t_val - p_val) 
+        else:
+            # Left Hand (on screen Left): Palm means Thumb(Right) > Pinky(Left) -> Diff is Pos -> Invert
+            diff = -(t_val - p_val)
+            
         axis_used = "X (Bent)"
         
     else:
@@ -331,7 +338,7 @@ try:
             
             # Calculate Hand Rotation (Palm/Back)
             _, hand_rotation_val, hand_orientation_str, _ = calculate_hand_rotation(
-                hand_lm, flexion_state, arm_orientation)
+                hand_lm, flexion_state, arm_orientation, side)
             
             # Calculate if each finger is open or closed
             for name, ids in FINGERS.items():

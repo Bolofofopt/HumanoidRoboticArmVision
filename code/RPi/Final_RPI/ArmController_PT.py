@@ -1,6 +1,6 @@
 """
 ======================================================================================
-NOME DO FICHEIRO: mediapipe_teste_serial2.py
+                    NOME DO FICHEIRO: mediapipe_teste_serial2.py
 ======================================================================================
 
 DESCRIÇÃO PARA PRINCIPIANTES:
