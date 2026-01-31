@@ -1,6 +1,6 @@
 """
 ======================================================================================
-                    NOME DO FICHEIRO: mediapipe_teste_serial2.py
+                        NOME DO FICHEIRO: ArmController_PT.py                           
 ======================================================================================
 
 DESCRIÇÃO PARA PRINCIPIANTES:
@@ -9,10 +9,10 @@ Ele usa uma câmara para ver o movimento do braço e da mão de uma pessoa e
 traduz esses movimentos para comandos que o robô consegue entender.
 
 O que este programa faz:
-1. Captura vídeo da câmara.
+1. Captura vídeo da câmara (Raspberry Pi Camera Module 3).
 2. Usa "Inteligência Artificial" (MediaPipe) para detetar onde estão os dedos, o cotovelo e o ombro.
 3. Faz cálculos matemáticos para perceber se o braço está esticado ou dobrado, e para onde está a apontar.
-4. Envia essas informações por um cabo (Série) para o Arduino, que controla os motores.
+4. Envia essas informações por comunicação em série (RX/TX) para o Arduino, que controla os motores.
 
 LINGUAGEM: Python
 ======================================================================================

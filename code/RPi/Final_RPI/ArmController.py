@@ -9,10 +9,10 @@ It uses a camera to see the movement of a person's arm and hand and
 translates these movements into commands that the robot can understand.
 
 What this program does:
-1. Captures video from the camera.
+1. Captures video from the camera (Raspberry Pi Camera Module 3).
 2. Uses "Artificial Intelligence" (MediaPipe) to detect where the fingers, elbow, and shoulder are.
 3. Performs mathematical calculations to determine if the arm is extended or bent, and where it is pointing.
-4. Sends this information via a cable (Serial) to the Arduino, which controls the motors.
+4. Sends this information via serial comunication (RX/TX) to the Arduino, which controls the motors.
 
 LANGUAGE: Python
 ======================================================================================

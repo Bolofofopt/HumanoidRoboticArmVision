@@ -1,6 +1,6 @@
 """
 ======================================================================================
-                        NOME DO FICHEIRO: VisionDebugger_PC_PT.py
+                        NOME DO FICHEIRO: VisionDebugger_PC_PT.py                   
 ======================================================================================
 
 DESCRIÇÃO:
@@ -93,7 +93,7 @@ ESPESSURA = 2                      # Espessura da linha para os desenhos
 # --- CONFIGURAÇÃO DOS MODELOS (Onde estão os ficheiros da IA) ---
 # O programa procura os ficheiros ".task" na mesma pasta onde este ficheiro .py está
 diretorio_script = os.path.dirname(os.path.abspath(__file__))
-CAMINHO_MODELO_POSE = os.path.join(diretorio_script, 'pose_landmarker_lite.task') 
+CAMINHO_MODELO_POSE = os.path.join(diretorio_script, 'pose_landmarker_lite.task') # 'pose_landmarker_heavy.task' para melhor performance
 CAMINHO_MODELO_MAO = os.path.join(diretorio_script, 'hand_landmarker.task')
 
 # --- DEFINIÇÃO DE CLASSES (Ferramentas personalizadas) ---
