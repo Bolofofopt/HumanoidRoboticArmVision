@@ -43,7 +43,7 @@ from mediapipe.tasks.python import vision
 # ======================================================================================
 
 # 1. CÂMARA (Webcam)
-INDICE_CAMERA = 2        # Qual câmara usar? (0 = Principal, 1 = Secundária/Externa)
+INDICE_CAMERA = 1        # Qual câmara usar? (0 = Principal, 1 = Secundária/Externa)
 LARGURA_CAMERA = 1280    # Largura da imagem (Recomendado: 640 para rapidez, 1280 para qualidade)
 ALTURA_CAMERA = 720      # Altura da imagem  (Recomendado: 480 para rapidez, 720 para qualidade)
 
@@ -84,11 +84,12 @@ LIMIARES_DEDOS = {
 }
 
 # Cores para os desenhos (Formato BGR: Azul, Verde, Vermelho)
-COR_OSSO_POSE = (0, 255, 0)      # Verde
-COR_ARTICULACAO_POSE = (0, 0, 255)     # Vermelho
-COR_OSSO_MAO = (255, 255, 0)    # Ciano (Amarelo+Verde ?)
-COR_ARTICULACAO_MAO = (255, 0, 0)     # Azul
-ESPESSURA = 2                      # Espessura da linha para os desenhos
+COR_OSSO_POSE = (0, 255, 0)         # Verde
+COR_ARTICULACAO_POSE = (0, 0, 255)  # Vermelho
+COR_OSSO_MAO = (255, 255, 0)        # Ciano (Amarelo+Verde ?)
+COR_ARTICULACAO_MAO = (255, 0, 0)   # Azul
+ESPESSURA_LINHAS = 2                # Espessura da linha para os desenhos
+ESPESSURA_PONTOS = 6                # Espessura dos pontos
 
 # --- CONFIGURAÇÃO DOS MODELOS (Onde estão os ficheiros da IA) ---
 # O programa procura os ficheiros ".task" na mesma pasta onde este ficheiro .py está
@@ -148,12 +149,12 @@ def desenhar_marcos_personalizado(imagem, marcos, conexoes, cor_articulacao, cor
     # Desenhar Pontos (Bolinhas)
     for mc in marcos:
         cx, cy = int(mc.x * w), int(mc.y * h)
-        cv2.circle(imagem, (cx, cy), 4, cor_articulacao, -1)
+        cv2.circle(imagem, (cx, cy), ESPESSURA_PONTOS, cor_articulacao, -1)
     # Desenhar Conexões (Riscos)
     if conexoes:
         for s, e in conexoes:
             if s < len(marcos) and e < len(marcos):
-                cv2.line(imagem, (int(marcos[s].x*w), int(marcos[s].y*h)), (int(marcos[e].x*w), int(marcos[e].y*h)), cor_osso, ESPESSURA)
+                cv2.line(imagem, (int(marcos[s].x*w), int(marcos[s].y*h)), (int(marcos[e].x*w), int(marcos[e].y*h)), cor_osso, ESPESSURA_LINHAS)
 
 def calcular_angulo_3pts(a, b, c):
     """
