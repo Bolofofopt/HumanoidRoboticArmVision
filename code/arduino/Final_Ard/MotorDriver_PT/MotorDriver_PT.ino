@@ -67,12 +67,12 @@ int g_bufferIndex = 0;         // Contador para saber em que letra vamos
 void setup() {
   // 1. Iniciar Comunicações (Canais de Rádio)
   // Serial:  Ligação ao computador (cabo USB) para ver mensagens de erro no ecrã (Debug).
-  // Serial2: Ligação ao Raspberry Pi (o cérebro da visão).
-  // Serial3: Ligação ao Arduino Uno (que controla a base rotativa).
+  // Serial2: Ligação ao Arduino Uno (que controla a base rotativa).
+  // Serial3: Ligação ao Raspberry Pi (o cérebro da visão).
   
   Serial.begin(115200);   // Velocidade rápida para o PC
-  Serial2.begin(115200);  // Velocidade rápida para o Raspberry Pi
-  Serial3.begin(9600);    // Velocidade normal para o Arduino Uno
+  Serial2.begin(9600);    // Velocidade normal para o Arduino Uno 
+  Serial3.begin(115200);  // Velocidade rápida para o Raspberry Pi
 
   // 2. Iniciar o Controlador de Servos (PCA9685)
   pwm.begin();           // Acorda a placa de servos
@@ -107,8 +107,8 @@ void setup() {
 void loop() {
   // --- PARTE 1: ESCUTAR O RASPBERRY PI ---
   // Enquanto houver dados a chegar do Pi e a mensagem não estiver terminada...
-  while (Serial2.available() > 0 && !g_mensagemPronta) {
-    char inChar = Serial2.read(); // Lê uma letra
+  while (Serial3.available() > 0 && !g_mensagemPronta) {
+    char inChar = Serial3.read(); // Lê uma letra
     
     if (inChar == '$') {
       // O símbolo '$' marca o INÍCIO de uma nova mensagem.
@@ -164,7 +164,7 @@ void processarMensagemRapida() {
   if (token == NULL) return; // Se não houver nada, cancela (segurança)
   
   // Envia essa ordem para o outro Arduino (Uno) que controla a base
-  Serial3.write(token[0]); 
+  Serial2.write(token[0]); 
   Serial.print("BASE -> Uno: ");
   Serial.println(token[0]); 
   
