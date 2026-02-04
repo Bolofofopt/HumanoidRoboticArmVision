@@ -1,103 +1,103 @@
-# Visão de Braço Robótico Humanóide (Humanoid Robotic Arm Vision)
+# Braço Robótico Humanoide Controlado por Visão Computacional (RIA-G7)
 
-Este projeto implementa um sistema completo de controlo para um braço robótico humanóide, utilizando Visão Computacional (MediaPipe) para detetar movimentos da mão/braço humano e replicá-los no robô.
+> **Projeto Integrado - TeSP Robótica e Inteligência Artificial** > Escola Superior Náutica Infante D. Henrique
 
-O sistema está dividido em 3 módulos principais: **PC (Debugger)**, **Raspberry Pi (Cérebro)** e **Arduino Mega (Driver)**.
+![Status](https://img.shields.io/badge/Status-Concluído-success)
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![C++](https://img.shields.io/badge/C%2B%2B-Arduino-blue)
+![Hardware](https://img.shields.io/badge/Raspberry_Pi-5-red)
 
----
+## 📋 Sobre o Projeto
 
-## 📂 Estrutura do Projeto
+Este repositório contém o código-fonte e a documentação de um **braço robótico antropomórfico** desenvolvido para mimetizar os movimentos do membro superior humano em tempo real.
 
-O código está organizado por hardware e, para cada componente, existem versões em **Inglês** (padrão) e **Português** (sufixo `_PT`).
+O sistema substitui controladores físicos tradicionais por algoritmos de **Visão Computacional**, permitindo uma interação natural "homem-máquina" onde o corpo do operador funciona como o comando. A estrutura mecânica foi produzida integralmente via manufatura aditiva (Impressão 3D em PLA), baseada no projeto *InMoov*.
 
-```
-HumanoidRoboticArmVision/
-├── code/
-│   ├── PC/                         # Código para COMPUTADOR
-│   │   ├── VisionDebugger_PC.py    # (Inglês) Teste de visão no PC
-│   │   └── VisionDebugger_PC_PT.py # (Português) Versão traduzida
-│   │
-│   ├── RPi/                        # Código para RASPBERRY PI 5
-│   │   └── Final_RPI/
-│   │       ├── ArmController.py    # (Inglês) Controlador principal
-│   │       └── ArmController_PT.py # (Português) Versão traduzida
-│   │
-│   └── arduino/                    # Código para ARDUINO MEGA
-│       └── Final_Ard/
-│           ├── MotorDriver/        # (Inglês) Sketch Arduino
-│           └── MotorDriver_PT/     # (Português) Sketch Arduino
-│
-└── REQUIREMENTS.txt                # Lista de bibliotecas necessárias
-```
+## ⚙️ Funcionalidades e Cinemática
+
+O robô possui um total de **7 Graus de Liberdade (DoF)**:
+
+* **Mão Robótica (5 DoF):** Controlo independente dos 5 dedos (aberto/fechado) utilizando geometria vetorial.
+* **Cotovelo / Pitch (1 DoF):** Movimento de extensão e flexão baseado na altura relativa do pulso.
+* **Base / Yaw (1 DoF):** Rotação da base (Esquerda/Centro/Direita) controlada pela angulação do ombro.
+* **Rotação do Pulso (Roll):** Ajuste da orientação da mão com compensação dinâmica de eixos.
 
 ---
 
-## 🚀 Módulos e Funcionalidades
+## 🛠️ Arquitetura de Hardware
 
-### 1. PC: Vision Debugger (`code/PC`)
+O projeto utiliza uma **arquitetura de processamento distribuído** para garantir baixa latência e estabilidade de sinal.
 
-- **Função**: Ferramenta de desenvolvimento para testar a detecção da IA sem precisar do robô ligado.
-- **Hardware**: Webcam padrão.
-- **Tecnologia**: Usa `mediapipe.tasks` (API Nova) com aceleração GPU (se disponível).
-- **Ficheiros Extra Necessários**: `pose_landmarker_lite.task` e `hand_landmarker.task` devem estar na mesma pasta.
+### Diagrama de Blocos
+A estrutura divide-se em três unidades de processamento:
 
-### 2. Raspberry Pi: Arm Controller (`code/RPi`)
+| Unidade | Função Principal | Comunicação |
+| :--- | :--- | :--- |
+| **Raspberry Pi 5 (8GB)** | Processamento de imagem (MediaPipe), IA e cálculo de ângulos. | UART (GPIO 14) -> Arduino MEGA |
+| **Arduino MEGA 2560** | **Mestre:** Recebe coordenadas, controla servos PWM e coordena o sistema. | I2C (Servos) / UART (Uno) |
+| **Arduino Uno** | **Escravo:** Dedicado exclusivamente ao controlo preciso do Motor de Passo da Base. | Sinais Digitais (Driver) |
 
-- **Função**: O "cérebro" do robô. Captura vídeo, processa a IA e envia comandos para o Arduino.
-- **Hardware**: Raspberry Pi 5 + Pi Camera.
-- **Tecnologia**: Usa `mp.solutions` (API Legada/Padrão) para compatibilidade e facilidade de instalação no Linux. Inclui comunicação Serial.
-
-### 3. Arduino: Motor Driver (`code/arduino`)
-
-- **Função**: Recebe ângulos do Raspberry Pi e controla os servos.
-- **Hardware**: Arduino Mega 2560 + Driver PCA9685 (I2C).
-- **Bibliotecas**: `Adafruit_PWMServoDriver`.
+### Lista de Componentes Chave
+* **Atuadores:**
+    * 1x Servo DS5160 (60kgf.cm) - Cotovelo.
+    * 6x Servos MG996R (10kgf.cm) - Dedos e Pulso.
+    * 1x Motor de Passo NEMA 17 (17HS4401S) - Base.
+* **Drivers:**
+    * PCA9685 (PWM I2C de 16 canais).
+    * CNC Shield V3 + Driver A4988.
+* **Energia:** Fontes independentes para Lógica (5V), Servos (7V) e Motor de Passo (12V) para isolamento de ruído.
 
 ---
 
-## 🛠️ Requisitos e Instalação
+## 💻 Arquitetura de Software
 
-Consulte o ficheiro `REQUIREMENTS.txt` para versões detalhadas.
+### Visão Computacional (Python)
+O núcleo de inteligência corre no Raspberry Pi utilizando a framework **MediaPipe** da Google.
+* **Deteção Robusta:** Em vez de usar a distância euclidiana (que falha com a profundidade), o algoritmo calcula o **ângulo** entre três pontos articulares para determinar se um dedo está fletido.
+* **Multithreading:** A captura de vídeo é separada do processamento para manter uma taxa de ~20 FPS.
+* **Bibliotecas:** OpenCV, MediaPipe, PySerial.
 
-### PC (Windows)
+### Firmware (C++)
+* **Arduino MEGA:** Faz o *parsing* da string recebida, converte ângulos em sinais PWM e gere a comunicação I2C.
+* **Arduino Uno:** Implementa uma máquina de estados para controlar a aceleração e direção do motor de passo sem bloquear o processador principal.
 
-```bash
-pip install opencv-python mediapipe numpy
-# Certifique-se que os ficheiros .task estão na pasta PC/
-```
+---
 
-### Raspberry Pi 5
+## 📡 Protocolo de Comunicação
 
-```bash
-# Instalar MediaPipe (ignorar aviso de sistema gerido externamente)
-pip install mediapipe --break-system-packages
-pip install opencv-python pyserial numpy
+A comunicação entre o PC/Raspberry Pi e o Arduino MEGA é feita via **UART** através de uma string formatada com marcadores de início (`$`) e fim (`\n`).
+
+**Estrutura da Trama:**
+```text
+$<Base>,<Flexão>,<D1>,<D2>,<D3>,<D4>,<D5>,<Rotação>\n
 ```
 
-### Arduino
+## 🚀 Instalação e Execução
+Montagem: Siga o esquema elétrico detalhado (ver diagrama Cirkit Designer).
 
-- Instalar a biblioteca "Adafruit PWM Servo Driver Library" através do Gestor de Bibliotecas do Arduino IDE.
+Arduino:
+* Carregue o firmware Slave no Arduino Uno.
+* Carregue o firmware Master no Arduino MEGA.
+* Raspberry Pi / PC:
+*     Instale as dependências: pip install opencv-python mediapipe pyserial.
+*     Execute o script principal em Python.
 
----
+Nota: O sistema suporta modo headless para operação remota via Raspberry Pi Connect.
 
-## 🎮 Como Usar
+## 📈 Resultados e Limitações
+**Desempenho:** O sistema atinge uma taxa de atualização estável (15-20 FPS), adequada para telepresença.
 
-1.  **Arduino**: Carregue o código `MotorDriver.ino` (ou `_PT`) para o Arduino Mega.
-2.  **Ligações**: Conecte o Arduino ao Raspberry Pi via USB.
-3.  **Raspberry Pi**: Execute o script:
-    ```bash
-    python3 code/RPi/Final_RPI/ArmController_PT.py
-    ```
-4.  **PC (Opcional)**: Se quiser apenas testar a visão no seu computador:
-    ```bash
-    python code/PC/VisionDebugger_PC_PT.py
-    ```
+Limitações Atuais:
+* Movimentos discretos (estados binários) para os dedos.
+* Falta de feedback sensorial (haptics).
+* Ausência do grau de liberdade Forward Pitch no ombro.
 
----
+## 👥 Autores (Grupo RIA-G7)
+- Henrique Abrantes (15196)
 
-## 🌍 Idiomas
+- Christian Rodrigues (15202)
 
-Todo o código principal foi traduzido.
+- Rodrigo Maria (15217)
 
-- Use os ficheiros sem sufixo para **Inglês** (comentários e variáveis em EN).
-- Use os ficheiros `_PT` para **Português de Portugal** (comentários didáticos e variáveis em PT).
+## 📚 Referências
+Este projeto baseia-se no trabalho de G. Langevin (InMoov) e documentação técnica do MediaPipe e Arduino. Para detalhes completos, consulte o relatório final no repositório.
