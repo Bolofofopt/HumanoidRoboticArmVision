@@ -488,8 +488,8 @@ If you want to take the project further, here are some suggestions:
 | Name                    | Contact                                 |
 | :---------------------- | :-------------------------------------- |
 | **Henrique Abrantes**   | [GitHub](https://github.com/Bolofofopt) |
-| **Christian Rodrigues** | —                                       |
-| **Rodrigo Maria**       | —                                       |
+| **Christian Rodrigues** | [GitHub](https://github.com/Crogued)    |
+| **Rodrigo Maria**       | [GitHub](https://github.com/becas4wd)   |
 
 Project developed as part of the Robotics and Artificial Intelligence program at Escola Superior Náutica Infante D. Henrique (Portugal).
 
