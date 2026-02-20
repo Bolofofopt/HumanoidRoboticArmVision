@@ -1,0 +1,4 @@
+PLACEHOLDER: PC debugger interface screenshot
+Replace this file with an image named "pc-debugger.jpg"
+
+Description: A screenshot of the VisionDebugger_PC.py running — showing the webcam feed with the MediaPipe hand landmarks (blue lines) and body pose landmarks (green lines) drawn on top, and the debug text values visible on screen.

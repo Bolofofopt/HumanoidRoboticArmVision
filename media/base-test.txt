@@ -1,0 +1,4 @@
+PLACEHOLDER: Base rotation test GIF
+Replace this file with a GIF named "base-test.gif"
+
+Description: A GIF showing the base rotating left, center, and right as the operator extends or folds their arm.

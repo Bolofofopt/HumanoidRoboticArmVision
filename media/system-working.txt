@@ -1,0 +1,4 @@
+PLACEHOLDER: System working GIF
+Replace this file with a GIF named "system-working.gif"
+
+Description: A GIF showing the full integrated system working — the operator making gestures in front of the camera and the robotic arm replicating the movements. Should show the arm, electronics, and optionally the screen with the vision output.

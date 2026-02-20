@@ -1,0 +1,4 @@
+PLACEHOLDER: Assembly process photo
+Replace this file with an image named "assembly-process.jpg"
+
+Description: A photo showing the assembly process of the arm — partially assembled hand/forearm with tendons and springs being installed.

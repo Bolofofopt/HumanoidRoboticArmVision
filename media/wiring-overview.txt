@@ -1,0 +1,4 @@
+PLACEHOLDER: Wiring overview photo
+Replace this file with an image named "wiring-overview.jpg"
+
+Description: A photo of the electronics wired up — showing the Raspberry Pi, Arduino MEGA, Arduino Uno with CNC Shield, PCA9685, and all the wire connections between them. Ideally shows the power supplies as well.

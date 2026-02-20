@@ -1,0 +1,4 @@
+PLACEHOLDER: Main demo GIF
+Replace this file with a GIF named "demo.gif"
+
+Description: A 10-15 second GIF showing the full robotic arm mimicking your hand and arm movements in real time. This is the hero image at the top of the README.

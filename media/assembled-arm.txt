@@ -1,0 +1,4 @@
+PLACEHOLDER: Assembled arm photo
+Replace this file with an image named "assembled-arm.jpg"
+
+Description: A photo of the fully assembled robotic arm (hand + forearm + base) before wiring the electronics. Shows the complete mechanical structure.

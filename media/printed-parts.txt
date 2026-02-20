@@ -1,0 +1,4 @@
+PLACEHOLDER: 3D printed parts photo
+Replace this file with an image named "printed-parts.jpg"
+
+Description: A photo of all the 3D printed parts laid out on a table after being removed from the printer. Shows the full set of PLA components ready for assembly.

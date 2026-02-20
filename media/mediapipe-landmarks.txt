@@ -1,0 +1,4 @@
+PLACEHOLDER: MediaPipe landmarks illustration
+Replace this file with an image named "mediapipe-landmarks.jpg"
+
+Description: An image showing the MediaPipe hand landmarks (21 points numbered 0-20) overlaid on a hand. Can be a screenshot from the debugger or an illustration showing how the landmark points are distributed across the hand joints.

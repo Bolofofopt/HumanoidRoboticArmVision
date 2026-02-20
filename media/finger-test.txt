@@ -1,0 +1,4 @@
+PLACEHOLDER: Finger control test GIF
+Replace this file with a GIF named "finger-test.gif"
+
+Description: A GIF showing the finger detection and control in action — open and close individual fingers and see the robot hand replicate the movements.

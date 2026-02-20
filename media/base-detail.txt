@@ -1,0 +1,4 @@
+PLACEHOLDER: Base detail photo
+Replace this file with an image named "base-detail.jpg"
+
+Description: A close-up photo of the custom base structure, showing the motor mount, bearing, and how the Arduinos and Raspberry Pi are housed inside.

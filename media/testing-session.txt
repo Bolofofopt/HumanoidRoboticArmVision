@@ -1,0 +1,4 @@
+PLACEHOLDER: Testing session GIF
+Replace this file with a GIF named "testing-session.gif"
+
+Description: A GIF of a testing/calibration session — showing a sequence of different hand poses being tested (e.g., making a fist, opening fingers one by one, rotating the wrist) and the robot responding.
