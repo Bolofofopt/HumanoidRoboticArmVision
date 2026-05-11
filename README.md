@@ -31,7 +31,7 @@ The arm has **7 independent degrees of freedom**: 5 fingers that open and close,
 ---
 
 ## 🎬 Demo
-
+https://github.com/user-attachments/assets/58556680-eb30-46fe-b466-be9ada0d2111
 <video src="media/demo.mp4" controls controlsList="nodownload"></video>
 
 ---
