@@ -4,7 +4,7 @@
 
 **A 3D-printed robotic arm that mimics your movements in real time using just a camera.**
 
-![Demo of the Robotic Arm](media/demo.gif)
+![Demo of the Robotic Arm](media/demo.mp4)
 
 ![Status](https://img.shields.io/badge/Status-Complete-success)
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
@@ -32,9 +32,7 @@ The arm has **7 independent degrees of freedom**: 5 fingers that open and close,
 
 ## 🎬 Demo
 
-|       Full System Demo       |            Finger Control             |           Base Rotation           |
-| :--------------------------: | :-----------------------------------: | :-------------------------------: |
-| ![Full demo](media/demo.gif) | ![Finger test](media/finger-test.gif) | ![Base test](media/base-test.gif) |
+![Full System Demo](media/demo.mp4)
 
 ---
 
@@ -136,6 +134,9 @@ The arm's structure is based on the open-source **InMoov** project. You need to 
 | :------------------- | :------------------------------------------------------------- |
 | 🖐️ Hand and Forearm  | [InMoov — Hand and Forearm](https://inmoov.fr/hand-and-forarm) |
 | 🖐️ Hand (I2 version) | [InMoov — Hand I2](https://inmoov.fr/hand-i2)                  |
+| 🏗️ Custom Base      | [Custom Base STL Files](Custom_Base_STL/)                      |
+
+> **💡 Note:** The base parts are not from InMoov. They were exclusively created by us for this project. You can find the STL files in the `Custom_Base_STL` folder in this repository.
 
 > **💡 Tip:** The **Hand I2** version is the most recent and includes design improvements for the fingers. We recommend using this one.
 
@@ -189,9 +190,9 @@ The base **is not part of InMoov** — we designed it ourselves in SolidWorks fo
 
 > **💡 Why a custom base?** The InMoov project includes a full torso, but we only needed the arm. So we designed a compact base that houses all the electronics and supports the arm's weight without overloading the motor.
 
-|                Assembly Process                 |               Assembled Arm               |              Base Detail              |
-| :---------------------------------------------: | :---------------------------------------: | :-----------------------------------: |
-| ![Assembly process](media/assembly-process.jpg) | ![Assembled arm](media/assembled-arm.jpg) | ![Base detail](media/base-detail.jpg) |
+|                Assembly Process                 |               Assembled Arm               |
+| :---------------------------------------------: | :---------------------------------------: |
+| ![Assembly process](media/assembly-process.jpg) | ![Assembled arm](media/assembled-arm.jpg) |
 
 ---
 
@@ -458,9 +459,7 @@ The Arduino MEGA uses the `$` symbol to know where a message starts and `\n` to 
 - **Finger accuracy:** The angle-based method is robust and works regardless of distance to the camera or hand rotation.
 - **Stability:** The UART protocol didn't drop any packets during testing — movements were smooth.
 
-|               System Working                |                Testing Session                |
-| :-----------------------------------------: | :-------------------------------------------: |
-| ![System working](media/system-working.gif) | ![Testing session](media/testing-session.gif) |
+![System working](media/system-working.mp4)
 
 ### Current Limitations
 
