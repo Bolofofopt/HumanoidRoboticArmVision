@@ -4,7 +4,7 @@
 
 **A 3D-printed robotic arm that mimics your movements in real time using just a camera.**
 
-![Demo of the Robotic Arm](media/demo.mp4)
+<video src="media/demo.mp4" controls controlsList="nodownload"></video>
 
 ![Status](https://img.shields.io/badge/Status-Complete-success)
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
@@ -32,7 +32,7 @@ The arm has **7 independent degrees of freedom**: 5 fingers that open and close,
 
 ## 🎬 Demo
 
-![Full System Demo](media/demo.mp4)
+<video src="media/demo.mp4" controls controlsList="nodownload"></video>
 
 ---
 
@@ -201,10 +201,10 @@ The base **is not part of InMoov** — we designed it ourselves in SolidWorks fo
 This is the part that requires the most attention. The system uses **three processors** working together:
 
 ```
-┌──────────────┐     UART      ┌──────────────────┐     UART      ┌──────────────┐
+┌──────────────┐     UART     ┌──────────────────┐     UART     ┌──────────────┐
 │ Raspberry Pi │ ──────────►  │  Arduino MEGA    │ ──────────►  │  Arduino Uno │
 │   5 (8GB)    │  GPIO14→RX1  │     2560         │  TX1→RX      │              │
-│              │              │                  │              │  + CNC Shield │
+│              │              │                  │              │ + CNC Shield │
 │ Vision (AI)  │              │ Central Control  │              │ Stepper Motor│
 └──────────────┘              └──────────────────┘              └──────────────┘
                                       │
@@ -459,7 +459,7 @@ The Arduino MEGA uses the `$` symbol to know where a message starts and `\n` to 
 - **Finger accuracy:** The angle-based method is robust and works regardless of distance to the camera or hand rotation.
 - **Stability:** The UART protocol didn't drop any packets during testing — movements were smooth.
 
-![System working](media/system-working.mp4)
+<video src="media/system-working.mp4" controls controlsList="nodownload"></video>
 
 ### Current Limitations
 
