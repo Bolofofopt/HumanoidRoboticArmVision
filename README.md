@@ -459,7 +459,7 @@ The Arduino MEGA uses the `$` symbol to know where a message starts and `\n` to 
 - **Finger accuracy:** The angle-based method is robust and works regardless of distance to the camera or hand rotation.
 - **Stability:** The UART protocol didn't drop any packets during testing — movements were smooth.
 
-https://github.com/user-attachments/assets/681f5f06-4ac3-47d7-b4e7-05ee7c9a4cda
+https://github.com/user-attachments/assets/0370e5d1-5927-4f3e-bb96-0c99ccfd8e14
 
 ### Current Limitations
 
