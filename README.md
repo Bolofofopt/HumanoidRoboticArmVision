@@ -31,8 +31,8 @@ The arm has **7 independent degrees of freedom**: 5 fingers that open and close,
 ---
 
 ## 🎬 Demo
+
 https://github.com/user-attachments/assets/58556680-eb30-46fe-b466-be9ada0d2111
-<video src="media/demo.mp4" controls controlsList="nodownload"></video>
 
 ---
 
@@ -459,7 +459,7 @@ The Arduino MEGA uses the `$` symbol to know where a message starts and `\n` to 
 - **Finger accuracy:** The angle-based method is robust and works regardless of distance to the camera or hand rotation.
 - **Stability:** The UART protocol didn't drop any packets during testing — movements were smooth.
 
-<video src="media/system-working.mp4" controls controlsList="nodownload"></video>
+https://github.com/user-attachments/assets/681f5f06-4ac3-47d7-b4e7-05ee7c9a4cda
 
 ### Current Limitations
 
