@@ -77,50 +77,149 @@ HumanoidRoboticArmVision/
 
 Here's everything you need to build the arm. Some components can be swapped for equivalents.
 
-### Electronics & Motors
+### Electronics & Computing
 
-| Component                     | Reference                        | Qty | Notes                                            |
-| :---------------------------- | :------------------------------- | :-: | :----------------------------------------------- |
-| Servo Motor (elbow)           | **DS5160** (60 kgf·cm)           |  1  | Needs to be powerful — supports the arm's weight |
-| Servo Motor (fingers + wrist) | **MG996R** (9-11 kgf·cm)         |  6  | 5 for fingers + 1 for wrist rotation             |
-| Stepper Motor (base)          | **17HS4401S** (NEMA 17)          |  1  | Precise rotation of the base                     |
-| Servo Driver                  | **PCA9685** (16-channel, I2C)    |  1  | Controls all servos using just 2 pins            |
-| Stepper Driver                | **A4988**                        |  1  | Plugs into the CNC Shield                        |
-| CNC Shield                    | **CNC Shield V3**                |  1  | Mounts directly on the Arduino Uno               |
-| Raspberry Pi                  | **Raspberry Pi 5** (8GB)         |  1  | The "brain" — processes the vision               |
-| Camera                        | **Raspberry Pi Camera Module 3** |  1  | Dedicated camera for the RPi                     |
-| Arduino                       | **Arduino MEGA 2560**            |  1  | Central motor controller                         |
-| Arduino                       | **Arduino Uno**                  |  1  | Dedicated to the stepper motor                   |
+| Component                     | Reference                        | Qty | Notes                                                 |
+| :---------------------------- | :------------------------------- | :-: | :---------------------------------------------------- |
+| Raspberry Pi                  | **Raspberry Pi 5** (8GB)         |  1  | The "brain" — processes real-time AI vision           |
+| Camera                        | **Raspberry Pi Camera Module 3** |  1  | Dedicated CSI camera for the RPi                      |
+| Camera Cable (RPi 5)          | **22-pin to 15-pin FPC cable**   |  1  | Required adapter cable for RPi 5 mini-CSI port        |
+| MicroSD Card                  | **32 GB or 64 GB** (Class 10/A2) |  1  | OS (Bookworm) & software drive for Raspberry Pi 5     |
+| Active Cooler                 | **Official RPi 5 Active Cooler** |  1  | Recommended heatsink + fan to avoid thermal throttle  |
+| Arduino                       | **Arduino MEGA 2560**            |  1  | Central motor controller                              |
+| Arduino                       | **Arduino Uno R3**               |  1  | Dedicated to the base stepper motor                   |
+| Servo Driver                  | **PCA9685** (16-channel, I2C)    |  1  | Controls all servos using just 2 pins                 |
+| Stepper Driver                | **A4988**                        |  1  | Plugs into the CNC Shield (with mini heatsink)        |
+| CNC Shield                    | **CNC Shield V3**                |  1  | Mounts directly on the Arduino Uno                    |
+
+### Motors & Actuators
+
+| Component                     | Reference                        | Qty | Notes                                                 |
+| :---------------------------- | :------------------------------- | :-: | :---------------------------------------------------- |
+| Servo Motor (elbow)           | **DS5160** (60 kgf·cm)           |  1  | Needs to be powerful — supports the forearm's weight  |
+| Servo Motor (fingers + wrist) | **MG996R** (9-11 kgf·cm)         |  6  | 5 for fingers + 1 for wrist rotation                  |
+| Stepper Motor (base)          | **17HS4401S** (NEMA 17)          |  1  | Precise rotation of the base (Yaw axis)               |
 
 ### Structure & Mechanics
 
-| Component    | Specification                      |   Qty   | Notes                                        |
-| :----------- | :--------------------------------- | :-----: | :------------------------------------------- |
-| PLA Filament | 1.75mm, any color                  |  ~500g  | For 3D printing all parts                    |
-| Springs      | 3/16″ x 1-3/4″ (4.8mm x 44.5mm)    |    5    | Finger return mechanism                      |
-| Tendons      | Braided fishing line, 0.8mm, 200LB | 5x 50cm | Pull the fingers closed                      |
-| Teflon Tubes | ID 1.5mm x OD 2.5mm                | ~160cm  | Guide the tendons                            |
-| Bearing      | (commercial, not printed)          |    1    | Connects the fixed base to the rotating part |
-| Magnets      | Ø 2.5mm, height 1mm                |    5    | Magnetic attachment                          |
+| Component    | Specification                      |   Qty   | Notes                                                        |
+| :----------- | :--------------------------------- | :-----: | :----------------------------------------------------------- |
+| PLA Filament | 1.75mm, 1 kg spool                 |  ~1 kg  | For 3D printing all parts (hand, forearm, custom base, etc.) |
+| Springs      | 3/16″ x 1-3/4″ (4.8mm x 44.5mm)    |    5    | Finger return mechanism                                      |
+| Tendons      | Braided fishing line, 0.8mm, 200LB | 5x 50cm | Pull the fingers closed (~2.5m total)                        |
+| Teflon Tubes | ID 1.5mm x OD 2.5mm                | ~160cm  | Guide the tendons through forearm and fingers                |
+| Bearing      | Commercial ball bearing            |    1    | Connects fixed base to rotating upper base                   |
+| Magnets      | Neodymium Ø 2.5mm, height 1mm      |    5    | Magnetic fingertip attachments                               |
 
-### Power
+### Power & Connectivity
 
-| Component      | Specification          | Notes                                  |
-| :------------- | :--------------------- | :------------------------------------- |
-| Power Supply 1 | **7V / 3A**            | For the servo motors (via PCA9685)     |
-| Power Supply 2 | **12-13V / 2A**        | For the stepper motor (via CNC Shield) |
-| USB Cables     | USB-A to USB-B         | To power the Arduinos                  |
-| RPi 5 Power    | **Official 27W USB-C** | For the Raspberry Pi 5                 |
+| Component           | Specification                  | Notes                                                |
+| :------------------ | :----------------------------- | :--------------------------------------------------- |
+| Power Supply 1      | **7V / 3A DC**                 | For the servo motors (via PCA9685 V+ screw terminal) |
+| Power Supply 2      | **12-13V / 2A DC**             | For the stepper motor (via CNC Shield power screw)   |
+| RPi 5 Power         | **Official 27W USB-C (5V/5A)** | Powers the Raspberry Pi 5 (and USB-connected boards) |
+| USB Cables          | **USB-A to USB-B** (2 units)   | Connects both Arduinos to PC/RPi                     |
+| DC Jack Adapters    | **5.5×2.1mm to screw terminal**| 2 units to wire DC supplies into screw terminals     |
+| Dupont Jumper Wires | **M-F & M-M ribbon set (40p)** | UART serial (RPi ↔ MEGA ↔ Uno) and I2C connections   |
 
-### Other
+### Consumables & Fasteners
 
-| Component                     | Notes                              |
-| :---------------------------- | :--------------------------------- |
-| Heat shrink tubing            | To insulate soldered joints        |
-| Hookup wire                   | For connections between components |
-| Polyimide tape (Kapton)       | Heat protection                    |
-| Assorted screws (M3, M4)      | To secure printed parts            |
-| Ecoflex™ 00-10 (RTV Silicone) | Optional — for fingertip grip pads |
+| Component                     | Notes                                                        |
+| :---------------------------- | :----------------------------------------------------------- |
+| Assorted screws (M3, M4)      | M3 (8–30mm) & M4 screws, nuts, and washers for assembly      |
+| Heat shrink tubing            | To insulate soldered wire joints                             |
+| Hookup wire (Cabo unifilar)   | Power distribution and common ground connections             |
+| Polyimide tape (Kapton)       | Heat protection and wire bundling                            |
+| Soldering flux & solder wire  | RMA flux and solder for secure electrical connections        |
+| Ecoflex™ 00-10 (RTV Silicone) | Optional — molded grip pads on fingertips                    |
+
+---
+
+## 💰 Estimated Project Cost
+
+Below is an estimated cost breakdown for the entire project, based on **European market prices (October 2026)**. Prices are in **EUR (€)** and reflect typical online retail prices including VAT.
+
+> **💡 Clones vs. Official:** Components marked with ★ have widely used compatible/clone alternatives (e.g., AliExpress, Amazon). Choosing clones for the microcontrollers and drivers can save **€50–€80** without sacrificing functionality.
+
+### 1. Computing & Control Electronics
+
+| Component               | Ref. / Spec                       | Qty |  Unit Price  |   Subtotal   | Notes                                      |
+| :---------------------- | :-------------------------------- | :-: | :----------: | :----------: | :----------------------------------------- |
+| Raspberry Pi            | RPi 5 (8 GB)                      |  1  |  ~€85.00 ¹   |   ~€85.00    | ¹ Official MSRP; street retail €90–€105    |
+| Camera Module           | RPi Camera Module 3               |  1  |   ~€28.00    |   ~€28.00    | Standard CSI camera (12 MP, autofocus)     |
+| Camera Adapter Cable    | 22-pin mini to 15-pin FPC (RPi 5) |  1  |    ~€3.50    |    ~€3.50    | Required: RPi 5 uses mini CSI connector    |
+| MicroSD Card            | 32 GB or 64 GB (Class 10 / A2)    |  1  |    ~€8.00    |    ~€8.00    | For Raspberry Pi OS (Bookworm) & software  |
+| Active Cooler           | Official RPi 5 Active Cooler      |  1  |    ~€6.00    |    ~€6.00    | Prevents thermal throttling during vision  |
+| Arduino ★               | Arduino MEGA 2560                 |  1  |  ~€20.00 ²   |   ~€20.00    | ² Quality clone; official Arduino is ~€45  |
+| Arduino ★               | Arduino Uno R3                    |  1  |  ~€12.00 ²   |   ~€12.00    | ² Quality clone; official Arduino is ~€28  |
+| Servo Driver            | PCA9685 (16-ch, I2C)              |  1  |    ~€5.00    |    ~€5.00    | ★ Clones available from ~€3.50             |
+| Stepper Driver          | A4988                             |  1  |    ~€4.00    |    ~€4.00    | Includes mini aluminum heatsink            |
+| CNC Shield              | CNC Shield V3                     |  1  |    ~€5.00    |    ~€5.00    | Plugs directly onto Arduino Uno            |
+| **Computing Subtotal**  |                                   |     |              | **~€176.50** |                                            |
+
+### 2. Motors & Actuators
+
+| Component                     | Ref. / Spec                 | Qty |  Unit Price  |   Subtotal   | Notes                                    |
+| :---------------------------- | :-------------------------- | :-: | :----------: | :----------: | :--------------------------------------- |
+| Servo Motor (elbow)           | DS5160 (60 kgf·cm)          |  1  |   ~€35.00    |   ~€35.00    | High-torque digital metal-gear servo     |
+| Servo Motor (fingers + wrist) | MG996R (metal gear)         |  6  |  ~€8.90 ³    |   ~€53.40    | ³ Retail unit price; 6-pack clones ~€28  |
+| Stepper Motor (base)          | 17HS4401S (NEMA 17)         |  1  |   ~€12.00    |   ~€12.00    | Standard bipolar stepper for base yaw    |
+| **Motors Subtotal**           |                             |     |              | **~€100.40** | **~€75.00** with clone 6-pack            |
+
+### 3. Power & Connectivity
+
+| Component             | Specification                  | Qty |  Unit Price  |   Subtotal   | Notes                                   |
+| :-------------------- | :----------------------------- | :-: | :----------: | :----------: | :-------------------------------------- |
+| Power Supply 1        | 7 V / 3 A DC                   |  1  |   ~€15.00    |   ~€15.00    | Powers servos via PCA9685 V+ terminal   |
+| Power Supply 2        | 12 V / 2 A DC                  |  1  |   ~€12.00    |   ~€12.00    | Powers stepper via CNC Shield           |
+| RPi 5 Power Supply    | Official 27 W USB-C (5V/5A)    |  1  |   ~€14.00    |   ~€14.00    | Recommended official supply             |
+| USB Cables            | USB-A to USB-B (for Arduinos)  |  2  |    ~€4.00    |    ~€8.00    | Connects Uno & MEGA                     |
+| DC Jack Adapters      | 5.5×2.1mm female to screw ter. |  2  |    ~€1.00    |    ~€2.00    | Wire barrel PSUs into screw terminals   |
+| Dupont Jumper Wires   | 40-pin ribbon (M-M & M-F)      |  1  |    ~€3.50    |    ~€3.50    | For UART & I2C communication wires      |
+| **Power Subtotal**    |                                |     |              |  **~€54.50** |                                         |
+
+### 4. Structure, Hardware & Mechanics
+
+| Component              | Specification                         | Qty |  Unit Price  |   Subtotal   | Notes                                   |
+| :--------------------- | :------------------------------------ | :-: | :----------: | :----------: | :-------------------------------------- |
+| PLA Filament           | 1.75 mm, 1 kg spool                   |  1  |   ~€20.00    |   ~€20.00    | ~1 kg used for arm, base, and brim/test |
+| Extension Springs      | 3/16″ × 1-3/4″ (4.8mm × 44.5mm)       |  5  |      —       |    ~€7.50 ⁴  | ⁴ Exact student purchase: €7.49         |
+| Tendons (Fishing Line) | Braided 200 LB, 0.8 mm (100m spool)   |  1  |      —       |    ~€8.00 ⁴  | ⁴ Exact student purchase: €8.12         |
+| Teflon Tubes (PTFE)    | ID 1.5 mm × OD 2.5 mm (~1.6m)         |  1  |      —       |    ~€2.00 ⁴  | ⁴ Exact student purchase: €2.00         |
+| Bearing                | Deep groove ball bearing (base joint) |  1  |    ~€3.00    |    ~€3.00    | Commercial hardware for rotating base   |
+| Neodymium Magnets      | Ø 2.5 mm × 1 mm                       |  5  |      —       |    ~€4.60 ⁴  | ⁴ Exact student purchase: €4.60         |
+| Screws & Fasteners Kit | Assorted M3 / M4 (screws, nuts, etc.) |  1  |   ~€10.00    |   ~€10.00    | Hex socket screws, nuts, and washers    |
+| **Structure Subtotal** |                                       |     |              |  **~€55.10** |                                         |
+
+### 5. Consumables & Assembly Supplies
+
+| Component                   | Specification / Ref.     |  Subtotal  | Notes                                             |
+| :-------------------------- | :----------------------- | :--------: | :------------------------------------------------ |
+| Heat shrink tubing          | Assorted diameters       |   ~€3.50 ⁴ | ⁴ Exact student purchase: €3.51                   |
+| Polyimide tape (Kapton)     | Ref. 095-0793            |   ~€5.00 ⁴ | ⁴ Exact student purchase: €5.03                   |
+| Hookup wire (Cabo unifilar) | Single core copper wire  |   ~€4.50 ⁴ | ⁴ Exact student purchase: €4.49                   |
+| Soldering Flux & Solder     | RMA Flux (Ref. 096-0207) |   ~€5.00 ⁴ | ⁴ Flux €1.99 + solder wire for wire splices       |
+| Ecoflex™ 00-10 *(optional)* | RTV Silicone trial kit   |  ~€35.00 ⁴ | ⁴ Exact student purchase: €35.00 (fingertip pads) |
+| **Consumables Subtotal**    |                          | **~€18.00**| **~€53.00** including Ecoflex™ 00-10              |
+
+### 📊 Total Estimated Cost Comparison
+
+| Scenario                                                      | Estimated Total |
+| :------------------------------------------------------------ | :-------------: |
+| 🟢 **Budget Build** (AliExpress clones, servo multipack, no Ecoflex) | **~€330 – €370** |
+| 🟡 **Mid-range Build** (mix of official/quality clones, without Ecoflex) | **~€400 – €440** |
+| 🟡 **Mid-range Build** (with Ecoflex silicone grip pads)      | **~€435 – €475** |
+| 🔴 **Full Official Build** (official Arduinos, retail prices, all accessories + Ecoflex) | **~€510 – €570** |
+
+> **🎓 Academic / Lab Project Reality (Actual Student Out-of-Pocket Cost):**
+> According to the project's official academic report ([`RIA_G7_Relatorio_Final_Braco_Robotico.pdf`](RIA_G7_Relatorio_Final_Braco_Robotico.pdf), Section 5.5, Table 4), the development team did **not** have to purchase all items from scratch. Key high-value hardware (**Raspberry Pi 5**, **Camera Module 3**, **Arduino MEGA**, **Arduino Uno**, **CNC Shield V3**, **DS5160 Servo**, and **NEMA 17 Stepper**) were already available in their university laboratory stock (*"emStock"*).
+>
+> As a result, the team's **actual out-of-pocket expenditure** was only **~€73 to €118** (for the springs, teflon tubes, fishing line, magnets, heat shrink, Kapton tape, wires, flux, and silicone). If you are building this in a university or makerspace with shared equipment, your upfront expense will be similarly modest!
+
+> **📝 General Notes & Practical Advice:**
+> - **Raspberry Pi 5 Availability:** The Raspberry Pi 5 is the largest single expense. Official approved resellers (e.g., Kubii, BerryBase, Pimoroni) sell it near MSRP (~€85–€90), while general marketplaces (Amazon) often list it at €95–€110 depending on stock.
+> - **3D Printing:** Estimates assume you have access to an FDM printer (e.g., Bambu Lab A1). If outsourcing the 3D printing of all parts, expect an additional commercial printing fee of €40–€90.
+> - **Consumable Bulk Packs:** Items like fishing line (100m spool), PTFE tubing, screws, and magnets are sold in packs larger than needed for one arm — you will have plenty of leftover materials for future maker projects.
 
 ---
 
