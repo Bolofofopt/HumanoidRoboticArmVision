@@ -16,17 +16,17 @@
 
 ---
 
-> **🌐 Language Note:** This README is written in **English**. However, the full technical report ([PDF](RIA_G7_Relatorio_Final_Braco_Robotico.pdf)) is in **Portuguese**. All source code files have two versions — an English version and a Portuguese version (files ending in `_PT`). Both versions are functionally identical; only comments and variable names differ. Use whichever you prefer.
+> **🌐 Language Note:** This README is written in **English**. However, the full technical report ([PDF](RIA_G7_Relatorio_Final_Braco_Robotico.pdf)) is in **Portuguese**. All source code files have two versions: an English version and a Portuguese version (files ending in `_PT`). Both versions are functionally identical; only comments and variable names differ. Use whichever you prefer.
 
 ---
 
 ## 📖 What Is This Project?
 
-This is a **humanoid robotic arm** that imitates your arm and hand movements in real time. Instead of buttons or joysticks, you simply stand in front of a camera — the system recognizes your gestures and the robot copies them automatically.
+This is a **humanoid robotic arm** that imitates your arm and hand movements in real time. Instead of buttons or joysticks, you simply stand in front of a camera: the system recognizes your gestures and the robot copies them automatically.
 
 The arm has **7 independent degrees of freedom**: 5 fingers that open and close, an elbow that goes up and down, and a rotating base that turns left and right. The entire mechanical structure was 3D-printed using the open-source [InMoov](https://inmoov.fr/) project as a foundation.
 
-**This README is a complete tutorial.** If you follow every step, you'll be able to build your own robotic arm — even without much experience in programming or electronics.
+**This README is a complete tutorial.** If you follow every step, you'll be able to build your own robotic arm, even without much experience in programming or electronics.
 
 ---
 
@@ -69,7 +69,7 @@ HumanoidRoboticArmVision/
 └── 📂 media/                              ← Project images and GIFs
 ```
 
-> **Note:** Each code file exists in **two versions** — English and Portuguese (`_PT` suffix). They are functionally identical; only the comments and variable names change.
+> **Note:** Each code file exists in **two versions**: English and Portuguese (`_PT` suffix). They are functionally identical; only the comments and variable names change.
 
 ---
 
@@ -81,7 +81,7 @@ Here's everything you need to build the arm. Some components can be swapped for 
 
 | Component                     | Reference                        | Qty | Notes                                                 |
 | :---------------------------- | :------------------------------- | :-: | :---------------------------------------------------- |
-| Raspberry Pi                  | **Raspberry Pi 5** (8GB)         |  1  | The "brain" — processes real-time AI vision           |
+| Raspberry Pi                  | **Raspberry Pi 5** (8GB)         |  1  | The "brain", processing real-time AI vision           |
 | Camera                        | **Raspberry Pi Camera Module 3** |  1  | Dedicated CSI camera for the RPi                      |
 | Camera Cable (RPi 5)          | **22-pin to 15-pin FPC cable**   |  1  | Required adapter cable for RPi 5 mini-CSI port        |
 | MicroSD Card                  | **32 GB or 64 GB** (Class 10/A2) |  1  | OS (Bookworm) & software drive for Raspberry Pi 5     |
@@ -96,7 +96,7 @@ Here's everything you need to build the arm. Some components can be swapped for 
 
 | Component                     | Reference                        | Qty | Notes                                                 |
 | :---------------------------- | :------------------------------- | :-: | :---------------------------------------------------- |
-| Servo Motor (elbow)           | **DS5160** (60 kgf·cm)           |  1  | Needs to be powerful — supports the forearm's weight  |
+| Servo Motor (elbow)           | **DS5160** (60 kgf·cm)           |  1  | Needs to be powerful to support the forearm's weight  |
 | Servo Motor (fingers + wrist) | **MG996R** (9-11 kgf·cm)         |  6  | 5 for fingers + 1 for wrist rotation                  |
 | Stepper Motor (base)          | **17HS4401S** (NEMA 17)          |  1  | Precise rotation of the base (Yaw axis)               |
 
@@ -131,7 +131,7 @@ Here's everything you need to build the arm. Some components can be swapped for 
 | Hookup wire (Cabo unifilar)   | Power distribution and common ground connections             |
 | Polyimide tape (Kapton)       | Heat protection and wire bundling                            |
 | Soldering flux & solder wire  | RMA flux and solder for secure electrical connections        |
-| Ecoflex™ 00-10 (RTV Silicone) | Optional — molded grip pads on fingertips                    |
+| Ecoflex™ 00-10 (RTV Silicone) | Optional: molded grip pads on fingertips                    |
 
 ---
 
@@ -183,11 +183,11 @@ Below is an estimated cost breakdown for the entire project, based on **European
 | Component              | Specification                         | Qty |  Unit Price  |   Subtotal   | Notes                                   |
 | :--------------------- | :------------------------------------ | :-: | :----------: | :----------: | :-------------------------------------- |
 | PLA Filament           | 1.75 mm, 1 kg spool                   |  1  |   ~€20.00    |   ~€20.00    | ~1 kg used for arm, base, and brim/test |
-| Extension Springs      | 3/16″ × 1-3/4″ (4.8mm × 44.5mm)       |  5  |      —       |    ~€7.50 ⁴  | ⁴ Exact student purchase: €7.49         |
-| Tendons (Fishing Line) | Braided 200 LB, 0.8 mm (100m spool)   |  1  |      —       |    ~€8.00 ⁴  | ⁴ Exact student purchase: €8.12         |
-| Teflon Tubes (PTFE)    | ID 1.5 mm × OD 2.5 mm (~1.6m)         |  1  |      —       |    ~€2.00 ⁴  | ⁴ Exact student purchase: €2.00         |
+| Extension Springs      | 3/16″ × 1-3/4″ (4.8mm × 44.5mm)       |  5  |     N/A      |    ~€7.50 ⁴  | ⁴ What we paid: €7.49                   |
+| Tendons (Fishing Line) | Braided 200 LB, 0.8 mm (100m spool)   |  1  |     N/A      |    ~€8.00 ⁴  | ⁴ What we paid: €8.12                   |
+| Teflon Tubes (PTFE)    | ID 1.5 mm × OD 2.5 mm (~1.6m)         |  1  |     N/A      |    ~€2.00 ⁴  | ⁴ What we paid: €2.00                   |
 | Bearing                | Deep groove ball bearing (base joint) |  1  |    ~€3.00    |    ~€3.00    | Commercial hardware for rotating base   |
-| Neodymium Magnets      | Ø 2.5 mm × 1 mm                       |  5  |      —       |    ~€4.60 ⁴  | ⁴ Exact student purchase: €4.60         |
+| Neodymium Magnets      | Ø 2.5 mm × 1 mm                       |  5  |     N/A      |    ~€4.60 ⁴  | ⁴ What we paid: €4.60                   |
 | Screws & Fasteners Kit | Assorted M3 / M4 (screws, nuts, etc.) |  1  |   ~€10.00    |   ~€10.00    | Hex socket screws, nuts, and washers    |
 | **Structure Subtotal** |                                       |     |              |  **~€55.10** |                                         |
 
@@ -195,11 +195,11 @@ Below is an estimated cost breakdown for the entire project, based on **European
 
 | Component                   | Specification / Ref.     |  Subtotal  | Notes                                             |
 | :-------------------------- | :----------------------- | :--------: | :------------------------------------------------ |
-| Heat shrink tubing          | Assorted diameters       |   ~€3.50 ⁴ | ⁴ Exact student purchase: €3.51                   |
-| Polyimide tape (Kapton)     | Ref. 095-0793            |   ~€5.00 ⁴ | ⁴ Exact student purchase: €5.03                   |
-| Hookup wire (Cabo unifilar) | Single core copper wire  |   ~€4.50 ⁴ | ⁴ Exact student purchase: €4.49                   |
+| Heat shrink tubing          | Assorted diameters       |   ~€3.50 ⁴ | ⁴ What we paid: €3.51                             |
+| Polyimide tape (Kapton)     | Ref. 095-0793            |   ~€5.00 ⁴ | ⁴ What we paid: €5.03                             |
+| Hookup wire (Cabo unifilar) | Single core copper wire  |   ~€4.50 ⁴ | ⁴ What we paid: €4.49                             |
 | Soldering Flux & Solder     | RMA Flux (Ref. 096-0207) |   ~€5.00 ⁴ | ⁴ Flux €1.99 + solder wire for wire splices       |
-| Ecoflex™ 00-10 *(optional)* | RTV Silicone trial kit   |  ~€35.00 ⁴ | ⁴ Exact student purchase: €35.00 (fingertip pads) |
+| Ecoflex™ 00-10 *(optional)* | RTV Silicone trial kit   |  ~€35.00 ⁴ | ⁴ What we paid: €35.00 (fingertip pads)           |
 | **Consumables Subtotal**    |                          | **~€18.00**| **~€53.00** including Ecoflex™ 00-10              |
 
 ### 📊 Total Estimated Cost Comparison
@@ -211,15 +211,15 @@ Below is an estimated cost breakdown for the entire project, based on **European
 | 🟡 **Mid-range Build** (with Ecoflex silicone grip pads)      | **~€435 – €475** |
 | 🔴 **Full Official Build** (official Arduinos, retail prices, all accessories + Ecoflex) | **~€510 – €570** |
 
-> **🎓 Academic / Lab Project Reality (Actual Student Out-of-Pocket Cost):**
-> According to the project's official academic report ([`RIA_G7_Relatorio_Final_Braco_Robotico.pdf`](RIA_G7_Relatorio_Final_Braco_Robotico.pdf), Section 5.5, Table 4), the development team did **not** have to purchase all items from scratch. Key high-value hardware (**Raspberry Pi 5**, **Camera Module 3**, **Arduino MEGA**, **Arduino Uno**, **CNC Shield V3**, **DS5160 Servo**, and **NEMA 17 Stepper**) were already available in their university laboratory stock (*"emStock"*).
+> **🎓 What We Actually Spent (Our Real Out-of-Pocket Cost):**
+> When we built this arm at our university, we didn't have to buy everything from scratch. As you can see in our project report ([`RIA_G7_Relatorio_Final_Braco_Robotico.pdf`](RIA_G7_Relatorio_Final_Braco_Robotico.pdf), Section 5.5, Table 4), our lab already had key high-value components in stock (*"emStock"*): the **Raspberry Pi 5**, **Camera Module 3**, **Arduino MEGA**, **Arduino Uno**, **CNC Shield V3**, **DS5160 Servo**, and **NEMA 17 Stepper**.
 >
-> As a result, the team's **actual out-of-pocket expenditure** was only **~€73 to €118** (for the springs, teflon tubes, fishing line, magnets, heat shrink, Kapton tape, wires, flux, and silicone). If you are building this in a university or makerspace with shared equipment, your upfront expense will be similarly modest!
+> Because of that, our **actual out-of-pocket spending was only ~€73 to €118** (mainly for the springs, teflon tubes, fishing line, magnets, heat shrink, Kapton tape, wires, flux, and silicone). If you're building this in a university or makerspace with shared equipment, your upfront cost will likely be similarly low!
 
-> **📝 General Notes & Practical Advice:**
-> - **Raspberry Pi 5 Availability:** The Raspberry Pi 5 is the largest single expense. Official approved resellers (e.g., Kubii, BerryBase, Pimoroni) sell it near MSRP (~€85–€90), while general marketplaces (Amazon) often list it at €95–€110 depending on stock.
-> - **3D Printing:** Estimates assume you have access to an FDM printer (e.g., Bambu Lab A1). If outsourcing the 3D printing of all parts, expect an additional commercial printing fee of €40–€90.
-> - **Consumable Bulk Packs:** Items like fishing line (100m spool), PTFE tubing, screws, and magnets are sold in packs larger than needed for one arm — you will have plenty of leftover materials for future maker projects.
+> **📝 Notes from Our Experience:**
+> - **Raspberry Pi 5 Availability:** It's the most expensive component in the build. We recommend buying from official approved resellers (like Kubii, BerryBase, or Pimoroni) near MSRP (~€85–€90), as general marketplaces like Amazon often mark it up to €95–€110 depending on stock.
+> - **3D Printing:** We printed all our parts on our Bambu Lab A1. If you don't have access to a 3D printer and need to outsource the printing, expect an additional commercial printing fee of €40–€90.
+> - **Bulk Consumables:** We had to buy items like fishing line (100m spool), PTFE tubing, screws, and magnets in packs much larger than what our arm actually needed, so you'll end up with plenty of leftover materials for future maker projects, just like we did.
 
 ---
 
@@ -231,8 +231,8 @@ The arm's structure is based on the open-source **InMoov** project. You need to 
 
 | Part                 | Link                                                           |
 | :------------------- | :------------------------------------------------------------- |
-| 🖐️ Hand and Forearm  | [InMoov — Hand and Forearm](https://inmoov.fr/hand-and-forarm) |
-| 🖐️ Hand (I2 version) | [InMoov — Hand I2](https://inmoov.fr/hand-i2)                  |
+| 🖐️ Hand and Forearm  | [InMoov: Hand and Forearm](https://inmoov.fr/hand-and-forarm) |
+| 🖐️ Hand (I2 version) | [InMoov: Hand I2](https://inmoov.fr/hand-i2)                  |
 | 🏗️ Custom Base      | [Custom Base STL Files](Custom_Base_STL/)                      |
 
 > **💡 Note:** The base parts are not from InMoov. They were exclusively created by us for this project. You can find the STL files in the `Custom_Base_STL` folder in this repository.
@@ -257,7 +257,7 @@ We used a **Bambu Lab A1** printer, but any FDM printer will work with these set
 
 During printing, part edges may lift off the bed (called _warping_). If this happens:
 
-1. **Enable "Brim"** in your slicer — this creates a thin rim around the part that increases bed adhesion.
+1. **Enable "Brim"** in your slicer: this creates a thin rim around the part that increases bed adhesion.
 2. **You don't need** to raise the bed temperature or lower the speed. With Brim enabled, standard settings work just fine.
 
 ![3D printed parts](media/printed-parts.jpg)
@@ -272,20 +272,20 @@ After printing all the parts, it's time to assemble.
 
 Follow the official InMoov instructions:
 
-- 📘 [Assembly guide — Hand and Forearm](https://inmoov.fr/hand-and-forarm)
-- 📘 [Assembly guide — Hand I2](https://inmoov.fr/hand-i2)
+- 📘 [Assembly guide: Hand and Forearm](https://inmoov.fr/hand-and-forarm)
+- 📘 [Assembly guide: Hand I2](https://inmoov.fr/hand-i2)
 
 Each InMoov page has step-by-step photos and videos explaining how to thread the tendons (fishing line), install the return springs, and route the teflon tubes.
 
 ### Base Assembly (Custom Part)
 
-The base **is not part of InMoov** — we designed it ourselves in SolidWorks for this project. It includes:
+The base **is not part of InMoov**; we designed it ourselves in SolidWorks for this project. It includes:
 
-- **Main structure** — houses the stepper motor, Raspberry Pi, and both Arduinos.
-- **Motor spacers** — ensure the motor shaft reaches the rotary coupling.
-- **Arm coupling interface** — two pieces (lower base + upper base) that connect the bearing to the arm.
-- **Rotary coupling** — transmits motion from the stepper motor to the rotating platform.
-- **Motor mount bracket** — secures the motor to the main structure.
+- **Main structure**: houses the stepper motor, Raspberry Pi, and both Arduinos.
+- **Motor spacers**: ensure the motor shaft reaches the rotary coupling.
+- **Arm coupling interface**: two pieces (lower base + upper base) that connect the bearing to the arm.
+- **Rotary coupling**: transmits motion from the stepper motor to the rotating platform.
+- **Motor mount bracket**: secures the motor to the main structure.
 
 > **💡 Why a custom base?** The InMoov project includes a full torso, but we only needed the arm. So we designed a compact base that houses all the electronics and supports the arm's weight without overloading the motor.
 
@@ -321,7 +321,7 @@ This is the part that requires the most attention. The system uses **three proce
                       (fingers/wrist) (elbow)
 ```
 
-> **💡 Why three processors instead of one?** The Raspberry Pi needs all its processing power for the AI-based vision. If it also had to control motors at the same time, everything would lag and the movements would be jerky. By splitting the tasks, each processor does what it's best at — no delays.
+> **💡 Why three processors instead of one?** The Raspberry Pi needs all its processing power for the AI-based vision. If it also had to control motors at the same time, everything would lag and the movements would be jerky. By splitting the tasks, each processor does what it's best at, with no delays.
 
 ### Wiring Table
 
@@ -331,21 +331,21 @@ This is the part that requires the most attention. The system uses **three proce
 | Arduino MEGA   | Arduino Uno      |  UART  |    Pin 18 (TX1)     |  Pin 0 (RX)   | Sends base commands ('0','1','2') |
 | Arduino MEGA   | PCA9685          |  I2C   | SDA (20) / SCL (21) |   SDA / SCL   | Controls the 7 servo motors       |
 | Arduino Uno    | CNC Shield V3    | Shield |    Pins 2, 5, 8     | STEP, DIR, EN | Controls the stepper motor        |
-| 7V/3A Supply   | PCA9685          |  Wire  |          —          |  V+ terminal  | Powers the servo motors           |
-| 12V/2A Supply  | CNC Shield       |  Wire  |          —          | 12V terminal  | Powers the stepper motor          |
+| 7V/3A Supply   | PCA9685          |  Wire  |         N/A         |  V+ terminal  | Powers the servo motors           |
+| 12V/2A Supply  | CNC Shield       |  Wire  |         N/A         | 12V terminal  | Powers the stepper motor          |
 
 > **⚠️ IMPORTANT:** Connect the **GND** (ground) of all components together. Without a common ground, serial communication will not work.
 
-### The PCA9685 Module — Simplified Servo Control
+### The PCA9685 Module: Simplified Servo Control
 
-The PCA9685 is a key component. Without it, you'd need 7 PWM pins from the Arduino to control 7 servos — and the Arduino doesn't have that many stable PWM pins. With the PCA9685:
+The PCA9685 is a key component. Without it, you'd need 7 PWM pins from the Arduino to control 7 servos, and the Arduino doesn't have that many stable PWM pins. With the PCA9685:
 
 - You control **up to 16 servos** using just **2 pins** (I2C: SDA and SCL).
 - The **motor power** comes from an external supply (7V), not from the Arduino. This protects the Arduino from current spikes.
 
-### CNC Shield V3 + A4988 — Stepper Motor
+### CNC Shield V3 + A4988: Stepper Motor
 
-The CNC Shield plugs directly into the Arduino Uno and accepts the A4988 driver. The connections are automatic — just plug it in and wire the stepper motor to the X-axis terminals.
+The CNC Shield plugs directly into the Arduino Uno and accepts the A4988 driver. The connections are automatic: just plug it in and wire the stepper motor to the X-axis terminals.
 
 > **💡 Why separate power supplies?** Motors draw a lot of current and generate electrical noise. If they shared the same supply as the Arduinos, the Arduinos could randomly restart or behave erratically. Separate supplies = stable system.
 
@@ -355,11 +355,11 @@ For the full interactive wiring diagram, visit the [Cirkit Designer project](htt
 
 ---
 
-## 💾 Step 4: Software — Arduino (Firmware)
+## 💾 Step 4: Software (Arduino Firmware)
 
 The firmware is the code that runs inside the Arduinos. You need to upload two different programs.
 
-### 4.1 — Arduino Uno (Base Stepper Motor)
+### 4.1: Arduino Uno (Base Stepper Motor)
 
 **File:** [`Arduino_Uno_CNC_Final.ino`](code/Arduino/Final_Ard/Arduino_Uno_CNC_Final/Arduino_Uno_CNC_Final.ino)
 
@@ -373,7 +373,7 @@ The firmware is the code that runs inside the Arduinos. You need to upload two d
 4. Open the `Arduino_Uno_CNC_Final.ino` file.
 5. Click **Upload** (→).
 
-### 4.2 — Arduino MEGA (Servo Control)
+### 4.2: Arduino MEGA (Servo Control)
 
 **File:** [`MotorDriver.ino`](code/Arduino/Final_Ard/MotorDriver/MotorDriver.ino) (English) or [`MotorDriver_PT.ino`](code/Arduino/Final_Ard/MotorDriver_PT/MotorDriver_PT.ino) (Portuguese)
 
@@ -398,13 +398,13 @@ The two Arduinos talk to each other via **UART** (serial port). The MEGA acts as
 
 ---
 
-## 🧠 Step 5: Software — Raspberry Pi (Computer Vision)
+## 🧠 Step 5: Software (Raspberry Pi Computer Vision)
 
-This is the most exciting part — the brain of the system.
+This is the most exciting part: the brain of the system.
 
 **File:** [`ArmController.py`](code/RPi/Final_RPI/ArmController.py) (English) or [`ArmController_PT.py`](code/RPi/Final_RPI/ArmController_PT.py) (Portuguese)
 
-### 5.1 — Install Dependencies
+### 5.1: Install Dependencies
 
 In the Raspberry Pi terminal, run:
 
@@ -414,13 +414,13 @@ pip install mediapipe opencv-python pyserial numpy --break-system-packages
 
 > The `--break-system-packages` flag is required on Raspberry Pi OS Bookworm because it's very restrictive with pip packages by default.
 
-### 5.2 — Physical Connection (UART)
+### 5.2: Physical Connection (UART)
 
 Connect the **GPIO 14 (TX)** on the Raspberry Pi to **Pin 19 (RX1)** on the Arduino MEGA with a wire. Also connect **GND** between the two.
 
 > **⚠️ Voltage levels:** The Raspberry Pi operates at 3.3V and the Arduino at 5V. In practice, the Arduino reads 3.3V as HIGH without issues (RPi TX → Arduino RX). If you need to send data from the Arduino to the RPi, use a voltage divider.
 
-### 5.3 — Run
+### 5.3: Run
 
 ```bash
 python3 ArmController.py
@@ -433,25 +433,25 @@ The system will:
 3. Calculate angles and finger states.
 4. Send the commands to the Arduino MEGA via UART.
 
-### 5.4 — Headless Mode (No Monitor)
+### 5.4: Headless Mode (No Monitor)
 
 The Raspberry Pi can run without a monitor. Use the [**Raspberry Pi Connect**](https://www.raspberrypi.com/software/connect/) service to access the screen remotely from any browser. We recommend using a **5G mobile hotspot** for better speed and lower latency.
 
 ---
 
-## 🖥️ Step 6: Software — PC (Debugging & Testing)
+## 🖥️ Step 6: Software (PC Debugging & Testing)
 
 If you want to test the computer vision **without having the robot assembled**, you can use the PC script.
 
 **File:** [`VisionDebugger_PC.py`](code/PC/VisionDebugger_PC.py) (English) or [`VisionDebugger_PC_PT.py`](code/PC/VisionDebugger_PC_PT.py) (Portuguese)
 
-### 6.1 — Install Dependencies (PC)
+### 6.1: Install Dependencies (PC)
 
 ```bash
 pip install opencv-python mediapipe numpy
 ```
 
-### 6.2 — Required Model Files
+### 6.2: Required Model Files
 
 The PC script uses a different MediaPipe API that needs model files. These are already included in the [`code/PC/`](code/PC/) folder:
 
@@ -460,7 +460,7 @@ The PC script uses a different MediaPipe API that needs model files. These are a
 
 **These files must be in the same folder as the Python script.**
 
-### 6.3 — Run
+### 6.3: Run
 
 ```bash
 python VisionDebugger_PC.py
@@ -533,7 +533,7 @@ $1,0,1,1,1,1,1,90\n
 
 > _Base at center, elbow extended, all fingers closed, wrist rotated to 90°._
 
-The Arduino MEGA uses the `$` symbol to know where a message starts and `\n` to know where it ends. This ensures only complete messages are processed — if a message arrives cut off, it's simply ignored.
+The Arduino MEGA uses the `$` symbol to know where a message starts and `\n` to know where it ends. This ensures only complete messages are processed; if a message arrives cut off, it's simply ignored.
 
 ---
 
@@ -554,18 +554,18 @@ The Arduino MEGA uses the `$` symbol to know where a message starts and `\n` to 
 ## 📊 Results
 
 - **Frame rate:** 15–20 FPS on the Raspberry Pi 5, sufficient for real-time control.
-- **Latency:** Noticeable but low — suitable for telepresence applications.
+- **Latency:** Noticeable but low, suitable for telepresence applications.
 - **Finger accuracy:** The angle-based method is robust and works regardless of distance to the camera or hand rotation.
-- **Stability:** The UART protocol didn't drop any packets during testing — movements were smooth.
+- **Stability:** The UART protocol didn't drop any packets during testing, ensuring smooth movements.
 
 https://github.com/user-attachments/assets/0370e5d1-5927-4f3e-bb96-0c99ccfd8e14
 
 ### Current Limitations
 
-- **Fingers** only have two states (open/closed) — no intermediate positions.
-- **Shoulder** doesn't include the forward pitch movement — it wasn't implemented.
+- **Fingers** only have two states (open/closed), with no intermediate positions.
+- **Shoulder** doesn't include the forward pitch movement, as it wasn't implemented.
 - **Camera** is not fixed to the robot; it can misalign if the table is bumped.
-- No **haptic feedback** — the operator can't feel what the robot touches.
+- No **haptic feedback**: the operator can't feel what the robot touches.
 
 ---
 
@@ -595,20 +595,22 @@ Project developed as part of the Robotics and Artificial Intelligence program at
 
 ## 📚 References & Credits
 
-- **InMoov** — [inmoov.fr](https://inmoov.fr/) — Gael Langevin's open-source project for the mechanical design of the hand and forearm.
-- **MediaPipe** — [Google AI](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker) — Computer vision framework for hand and pose detection.
-- **OpenCV** — [opencv.org](https://opencv.org/) — Image processing library.
-- **Raspberry Pi** — [raspberrypi.com](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html) — Raspberry Pi 5 documentation.
-- **Arduino** — [docs.arduino.cc](https://docs.arduino.cc/hardware/mega-2560) — Arduino MEGA 2560 documentation.
-- **Cirkit Designer** — [Interactive wiring diagram](https://app.cirkitdesigner.com/project/) — Full schematic.
+- **InMoov** ([inmoov.fr](https://inmoov.fr/)): Gael Langevin's open-source project for the mechanical design of the hand and forearm.
+- **MediaPipe** ([Google AI](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker)): Computer vision framework for hand and pose detection.
+- **OpenCV** ([opencv.org](https://opencv.org/)): Image processing library.
+- **Raspberry Pi** ([raspberrypi.com](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html)): Raspberry Pi 5 documentation.
+- **Arduino** ([docs.arduino.cc](https://docs.arduino.cc/hardware/mega-2560)): Arduino MEGA 2560 documentation.
+- **Cirkit Designer** ([Interactive wiring diagram](https://app.cirkitdesigner.com/project/)): Full schematic.
 
 > For the complete technical analysis (torque calculations, mathematical foundations, detailed engineering decisions), see the [full report in PDF](RIA_G7_Relatorio_Final_Braco_Robotico.pdf) included in this repository (Portuguese).
+
+> **AI Assistance Disclosure:** We used Claude and Gemini models as assistive tools during this project, helping us with software development, code refinement, and the writing and structuring of this README documentation. All mechanical engineering, hardware integration, and experimental testing were conducted by the authors.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE) — you are free to use, modify, and distribute it.
+This project is licensed under the [MIT License](LICENSE); you are free to use, modify, and distribute it.
 
 ---
 
